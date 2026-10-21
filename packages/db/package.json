@@ -1,0 +1,29 @@
+{
+  "name": "@ezly/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "seed": "tsx prisma/seed.ts",
+    "typecheck": "tsc --noEmit",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "7.10.1",
+    "@prisma/client": "7.10.1",
+    "@ezly/rating": "workspace:*"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10",
+    "@types/node": "^22",
+    "dotenv": "^17",
+    "prisma": "7.10.1",
+    "tsx": "^4",
+    "typescript": "^5"
+  }
+}

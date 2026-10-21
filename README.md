@@ -1,16 +1,32 @@
-# Ezly Agency
+# Ezly
 
-A small insurance agency management app inspired by the feature set of EZLynx
-(agency management + personal-lines comparative rater).
+Insurance agency management system with a built-in personal-lines comparative
+rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md) and
+[docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md).
 
-## Features
-- **Dashboard**: client and policy counts, written premium, renewals due in 60 days
-- **Clients (CRM)**: add leads/prospects/customers
-- **Quote Rater**: enter a risk once, compare premiums across carriers, bind the chosen quote
-- **Policies**: view, renew (+1 year), or cancel
+## Layout
+| Path | What |
+|---|---|
+| `apps/web` | Next.js app (UI + API) |
+| `packages/db` | Prisma schema, migrations, demo seed |
+| `packages/rating` | `RatingAdapter` interface, simulated carriers, `rateAll` |
+| `prototype/` | Original static click-through prototype |
 
-Carrier rates are simulated; real carrier rating would need carrier API integrations.
-Data is stored in the browser's localStorage.
+## Getting started
+Requires Node 22, pnpm 10 and Docker.
 
-## Run
-Open `index.html` in a browser, or serve the folder: `python3 -m http.server 8000`.
+```sh
+cp .env.example packages/db/.env
+cp .env.example apps/web/.env
+pnpm install
+pnpm db:up          # Postgres + Redis
+pnpm db:migrate
+pnpm db:seed        # demo agency with 50 fake accounts
+pnpm dev            # http://localhost:3000
+```
+
+Checks: `pnpm lint && pnpm typecheck && pnpm test && pnpm build`.
+
+Carriers are simulated until real carrier connections are added: each real
+carrier becomes a new `RatingAdapter` in `packages/rating`.
+Never load real customer data into development databases.

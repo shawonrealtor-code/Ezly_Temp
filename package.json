@@ -1,0 +1,15 @@
+{
+  "name": "ezly",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "pnpm --filter @ezly/web dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "db:up": "docker compose up -d",
+    "db:migrate": "pnpm --filter @ezly/db migrate",
+    "db:seed": "pnpm --filter @ezly/db seed"
+  }
+}
