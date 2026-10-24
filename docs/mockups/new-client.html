@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ezly · New client</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div id="page">
+  <div class="page-head">
+    <div><h1>New personal lines client</h1><p>Enter it once — Ezly reuses it for every carrier.</p></div>
+    <div class="actions"><span class="btn">Cancel</span><span class="btn">Save draft</span><span class="btn primary">Save &amp; continue to Home</span></div>
+  </div>
+
+  <div class="card card-body stepper">
+    <div class="step done"><span class="n"><i data-icon="check"></i></span>Applicant</div><div class="step-line done"></div>
+    <div class="step on"><span class="n">2</span>Contact &amp; address</div><div class="step-line"></div>
+    <div class="step"><span class="n">3</span>Home / Auto details</div><div class="step-line"></div>
+    <div class="step"><span class="n">4</span>Coverages</div><div class="step-line"></div>
+    <div class="step"><span class="n">5</span>Review &amp; rate</div>
+  </div>
+
+  <div class="grid stack-sm" style="grid-template-columns: 1fr 300px; align-items:start">
+    <div class="card">
+      <div class="form-section" style="display:flex; align-items:center; gap:14px; background:#f9fafb">
+        <div class="lob-icon b-violet"><i data-icon="sparkle"></i></div>
+        <div style="flex:1"><b>Prefill from public records</b><div class="muted" style="font-size:13px">Find vehicles, drivers and property details from the name and address.</div></div>
+        <span class="btn sm">Prefill home</span><span class="btn sm">Prefill auto</span>
+      </div>
+      <div class="form-section">
+        <h3>Primary address</h3>
+        <p>Start typing and pick a match — city, county and ZIP+4 fill in automatically.</p>
+        <div class="form-grid">
+          <div class="field" style="grid-column: span 3"><label>Street address <span class="req">*</span></label><div class="input">1420 Willow Creek Dr</div></div>
+          <div class="field"><label>Unit</label><div class="input placeholder">Apt, suite…</div></div>
+          <div class="field"><label>City <span class="req">*</span></label><div class="input">Columbia</div></div>
+          <div class="field"><label>County<span class="rate"></span></label><div class="input">Howard <i data-icon="chevron"></i></div></div>
+          <div class="field"><label>State <span class="req">*</span></label><div class="input">MD <i data-icon="chevron"></i></div></div>
+          <div class="field"><label>ZIP <span class="req">*</span></label><div class="input">21044-2318</div></div>
+          <div class="field"><label>Years at address<span class="rate"></span></label><div class="input warn placeholder">Select <i data-icon="chevron"></i></div><span class="hint warn">Needed to rate</span></div>
+          <div class="field"><label>Months at address</label><div class="input placeholder">Select <i data-icon="chevron"></i></div></div>
+          <div class="field" style="grid-column: span 2"><label>Address type</label><div class="radio-row"><span class="on">Home</span><span>Mailing</span><span>Both</span></div></div>
+        </div>
+      </div>
+      <div class="form-section">
+        <h3>Phone &amp; email</h3>
+        <p>Add as many as needed. The preferred one is used for reminders.</p>
+        <div class="form-grid">
+          <div class="field"><label>Phone type</label><div class="input">Mobile <i data-icon="chevron"></i></div></div>
+          <div class="field"><label>Phone number<span class="rate"></span></label><div class="input">(410) 555-0175</div></div>
+          <div class="field"><label>Email type</label><div class="input">Primary <i data-icon="chevron"></i></div></div>
+          <div class="field"><label>Email</label><div class="input err">maria.ortega@example</div><span class="hint err">Enter a valid email address</span></div>
+          <div class="field" style="grid-column: span 2"><label>Preferred contact method</label><div class="radio-row"><span class="on">Text</span><span>Call</span><span>Email</span></div></div>
+          <div class="field" style="grid-column: span 2"><label>Share email with carriers when rating</label><div style="padding-top:8px"><span class="toggle"></span> <span class="muted" style="margin-left:6px">Off</span></div></div>
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px"><span class="btn sm"><i data-icon="plus"></i>Add phone</span><span class="btn sm"><i data-icon="plus"></i>Add email</span><span class="btn sm"><i data-icon="plus"></i>Add co-applicant</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:20px">
+      <div class="card ready">
+        <div class="card-head"><h2>Ready to rate?</h2><span class="badge b-amber plain" style="margin-left:auto">7 of 9</span></div>
+        <div class="card-body">
+          <div class="progress"><div style="width:78%"></div></div>
+          <ul style="margin-top:12px">
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Name &amp; date of birth</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Gender &amp; marital status</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Industry &amp; occupation</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Street, city, state, ZIP</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>County</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Phone number</li>
+            <li><span class="tick b-green"><i data-icon="check"></i></span>Driver's license status</li>
+            <li><span class="tick b-amber"><i data-icon="alert"></i></span><span>Years at address</span></li>
+            <li><span class="tick b-amber"><i data-icon="alert"></i></span><span>Previous address <span class="muted">(if under 3 yrs)</span></span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card card-body" style="font-size:13px; line-height:1.7">
+        <b>Legend</b><br>
+        <span class="req" style="color:var(--danger)">*</span> Required to save<br>
+        <span class="rate" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--warning-dot)"></span> Required before quoting carriers
+      </div>
+    </div>
+  </div>
+</div>
+<script src="shared.js"></script><script>renderShell("accounts"); hydrateIcons();</script>
+</body></html>

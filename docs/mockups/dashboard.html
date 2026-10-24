@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ezly · Dashboard</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div id="page">
+  <div class="page-head">
+    <div><h1>Good morning, Jordan</h1><p>Friday, October 24 · Here's what needs your attention today.</p></div>
+    <div class="actions"><span class="btn"><i data-icon="calendar"></i>This month</span><span class="btn primary"><i data-icon="quotes"></i>Start a quote</span></div>
+  </div>
+
+  <div class="kpis">
+    <div class="card kpi"><div class="label">Open leads</div><div class="value">38</div><div class="delta"><b>+6</b> this week</div></div>
+    <div class="card kpi"><div class="label">Quotes this week</div><div class="value">24</div><div class="delta"><b>+18%</b> vs last week</div></div>
+    <div class="card kpi"><div class="label">New premium (Oct)</div><div class="value">$48,210</div><div class="delta">19 policies bound</div></div>
+    <div class="card kpi"><div class="label">Quote → bind rate</div><div class="value">31%</div><div class="delta"><b>+3 pts</b> vs September</div></div>
+    <div class="card kpi"><div class="label">Renewals next 30 days</div><div class="value">17</div><div class="delta" style="color:var(--warning)">4 with premium increase &gt;10%</div></div>
+  </div>
+
+  <div class="grid stack-sm" style="grid-template-columns: 1fr 1.7fr 0.95fr;">
+    <div class="card">
+      <div class="card-head"><i data-icon="tasks"></i><h2>My tasks</h2><a class="more">View all</a></div>
+      <div class="section-label" style="color:var(--danger)">Overdue · 1</div>
+      <div class="list-row"><span class="check"></span><div class="grow"><div class="title">Call back about flood quote</div><div class="sub">Aisha Rahman · due yesterday</div></div></div>
+      <div class="section-label" style="color:var(--success)">Today · 3</div>
+      <div class="list-row"><span class="check"></span><div class="grow"><div class="title">Send renewal options</div><div class="sub">Thomas Nguyen · Auto renews Nov 3</div></div><span class="badge b-amber plain">High</span></div>
+      <div class="list-row"><span class="check"></span><div class="grow"><div class="title">Collect roof photos</div><div class="sub">Maria &amp; Daniel Ortega · Home</div></div></div>
+      <div class="list-row"><span class="check"></span><div class="grow"><div class="title">Follow up on new lead</div><div class="sub">Kevin Brooks · website form</div></div></div>
+      <div class="section-label" style="color:var(--primary)">Upcoming · 4</div>
+      <div class="list-row"><span class="check"></span><div class="grow"><div class="title">Annual review meeting</div><div class="sub">Emily Carter · Mon, Oct 27</div></div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><i data-icon="policies"></i><h2>Renewals coming up</h2><span class="badge b-gray plain" style="margin-left:6px">17</span><a class="more">Open renewal center</a></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Client</th><th>Line · Carrier</th><th>Renews</th><th class="right">Premium change</th></tr></thead>
+        <tbody>
+          <tr><td><div class="name-cell"><div class="mono b-blue">TN</div>Thomas Nguyen</div></td><td>Auto · Summit Mutual</td><td><span class="badge b-red">in 10 days</span></td><td class="right num" style="color:var(--danger)">+14.2%</td></tr>
+          <tr><td><div class="name-cell"><div class="mono b-violet">EC</div>Emily Carter</div></td><td>Home · Pinecrest General</td><td><span class="badge b-amber">in 16 days</span></td><td class="right num" style="color:var(--danger)">+11.8%</td></tr>
+          <tr><td><div class="name-cell"><div class="mono b-green">RP</div>Rajesh Patel</div></td><td>Home · Harbor Insurance</td><td><span class="badge b-amber">in 21 days</span></td><td class="right num">+3.1%</td></tr>
+          <tr><td><div class="name-cell"><div class="mono b-amber">SA</div>Sofia Alvarez</div></td><td>Auto · Crescent Casualty</td><td><span class="badge b-gray">in 27 days</span></td><td class="right num" style="color:var(--success)">−2.4%</td></tr>
+          <tr><td><div class="name-cell"><div class="mono b-blue">ML</div>Marcus Lee</div></td><td>Dwelling Fire · Summit Mutual</td><td><span class="badge b-gray">in 29 days</span></td><td class="right num">+0.8%</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="grid" style="gap:20px; align-content:start">
+      <div class="card">
+        <div class="card-head"><i data-icon="requests"></i><h2>Underwriting requests</h2></div>
+        <div class="list-row"><div class="grow">Waiting on me</div><span class="badge b-red plain">2</span></div>
+        <div class="list-row"><div class="grow">Bind requests (7 days)</div><span class="badge b-blue plain">5</span></div>
+        <div class="list-row"><div class="grow">Final price (30 days)</div><span class="badge b-gray plain">9</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i data-icon="accounts"></i><h2>Lead pipeline</h2></div>
+        <div class="list-row"><div class="grow">New</div><b class="num">14</b></div>
+        <div class="list-row"><div class="grow">Contacted</div><b class="num">11</b></div>
+        <div class="list-row"><div class="grow">Quoted</div><b class="num">9</b></div>
+        <div class="list-row"><div class="grow">Sold this month</div><b class="num" style="color:var(--success)">6</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="shared.js"></script><script>renderShell("dashboard"); hydrateIcons();</script>
+</body></html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ezly · Accounts</title><link rel="stylesheet" href="shared.css"></head>
+<body>
+<div id="page">
+  <div class="page-head">
+    <div><h1>Accounts</h1><p>236 clients and prospects</p></div>
+    <div class="actions"><span class="btn"><i data-icon="upload"></i>Import</span><span class="btn">Export CSV</span><span class="btn primary"><i data-icon="plus"></i>New client</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center">
+      <div class="search" style="max-width:360px; background:#fff">
+        <i data-icon="search"></i><span>Name, email, phone, policy #, ZIP…</span>
+      </div>
+      <span class="chip on">All</span><span class="chip">My clients</span>
+      <span class="chip">Lead status: Any <i data-icon="chevron"></i></span>
+      <span class="chip">Line: Any <i data-icon="chevron"></i></span>
+      <span class="chip">Producer: Any <i data-icon="chevron"></i></span>
+      <span class="chip"><i data-icon="filter"></i>More filters</span>
+    </div>
+    <table>
+      <thead><tr><th>Client</th><th>Lines</th><th>Status</th><th>Producer</th><th>Location</th><th class="right">Annual premium</th><th>Last activity</th></tr></thead>
+      <tbody>
+        <tr><td><div class="name-cell"><div class="mono b-blue">MO</div><div>Maria &amp; Daniel Ortega<small>maria.ortega@example.com</small></div></div></td><td><span class="badge b-gray plain">Home</span> <span class="badge b-gray plain">Auto</span></td><td><span class="badge b-violet">Quoted</span></td><td>Jordan Mitchell</td><td class="muted">Columbia, MD</td><td class="right num">—</td><td class="muted">Quote run · 2h ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-green">TN</div><div>Thomas Nguyen<small>(410) 555-0142</small></div></div></td><td><span class="badge b-gray plain">Auto</span></td><td><span class="badge b-green">Customer</span></td><td>Jordan Mitchell</td><td class="muted">Baltimore, MD</td><td class="right num">$2,184</td><td class="muted">Renewal task · today</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-amber">AR</div><div>Aisha Rahman<small>aisha.r@example.com</small></div></div></td><td><span class="badge b-gray plain">Home</span></td><td><span class="badge b-blue">Contacted</span></td><td>Lena Park</td><td class="muted">Fairfax, VA</td><td class="right num">—</td><td class="muted">Call · yesterday</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-violet">EC</div><div>Emily Carter<small>(301) 555-0187</small></div></div></td><td><span class="badge b-gray plain">Home</span> <span class="badge b-gray plain">Umbrella</span></td><td><span class="badge b-green">Customer</span></td><td>Jordan Mitchell</td><td class="muted">Rockville, MD</td><td class="right num">$3,412</td><td class="muted">Email · 2d ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-blue">KB</div><div>Kevin Brooks<small>Website lead</small></div></div></td><td><span class="badge b-gray plain">Auto</span></td><td><span class="badge b-amber">New lead</span></td><td>Unassigned</td><td class="muted">Arlington, VA</td><td class="right num">—</td><td class="muted">Created · 3h ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-green">RP</div><div>Rajesh Patel<small>rpatel@example.com</small></div></div></td><td><span class="badge b-gray plain">Home</span> <span class="badge b-gray plain">Auto</span></td><td><span class="badge b-green">Customer</span></td><td>Lena Park</td><td class="muted">Ellicott City, MD</td><td class="right num">$4,960</td><td class="muted">Document · 4d ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-amber">SA</div><div>Sofia Alvarez<small>(703) 555-0119</small></div></div></td><td><span class="badge b-gray plain">Auto</span></td><td><span class="badge b-green">Customer</span></td><td>Jordan Mitchell</td><td class="muted">Alexandria, VA</td><td class="right num">$1,638</td><td class="muted">Note · 1w ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-red">HK</div><div>Hannah Kim<small>hannah.kim@example.com</small></div></div></td><td><span class="badge b-gray plain">Renters</span></td><td><span class="badge b-red">Lost</span></td><td>Lena Park</td><td class="muted">Silver Spring, MD</td><td class="right num">—</td><td class="muted">Marked lost · 2w ago</td></tr>
+        <tr><td><div class="name-cell"><div class="mono b-blue">DO</div><div>David Okafor<small>(571) 555-0163</small></div></div></td><td><span class="badge b-gray plain">Home</span></td><td><span class="badge b-violet">Quoted</span></td><td>Jordan Mitchell</td><td class="muted">Leesburg, VA</td><td class="right num">—</td><td class="muted">Quote emailed · 2w ago</td></tr>
+      </tbody>
+    </table>
+    <div class="card-body" style="display:flex; align-items:center; border-top:1px solid var(--border)">
+      <span class="muted">Showing 1–9 of 236</span>
+      <span style="margin-left:auto; display:flex; gap:6px"><span class="btn sm">Previous</span><span class="btn sm">Next</span></span>
+    </div>
+  </div>
+</div>
+<script src="shared.js"></script><script>renderShell("accounts"); hydrateIcons();</script>
+</body></html>
