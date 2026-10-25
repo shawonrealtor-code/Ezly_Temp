@@ -1,7 +1,8 @@
 # Ezly
 
 Insurance agency management system with a built-in personal-lines comparative
-rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md) and
+rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md),
+[docs/operations/](docs/operations/README.md) (hosting, security, operations) and
 [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md).
 
 ## Layout
