@@ -13,8 +13,8 @@
     "next": "16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "@ezly/db": "workspace:*",
-    "@ezly/rating": "workspace:*"
+    "@ezly/rating": "workspace:*",
+    "@ezly/store": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

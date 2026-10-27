@@ -3,8 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
-  transpilePackages: ["@ezly/db", "@ezly/rating"],
-  serverExternalPackages: ["@prisma/adapter-pg", "pg"],
+  transpilePackages: ["@ezly/rating", "@ezly/store"],
   turbopack: {
     rules: {
       "*.css": {

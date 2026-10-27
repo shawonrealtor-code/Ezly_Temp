@@ -8,8 +8,7 @@
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "db:up": "docker compose up -d",
-    "db:migrate": "pnpm --filter @ezly/db migrate",
-    "db:seed": "pnpm --filter @ezly/db seed"
+    "keygen": "pnpm --filter @ezly/store keygen",
+    "seed": "pnpm --filter @ezly/store seed"
   }
 }

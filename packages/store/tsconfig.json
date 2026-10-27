@@ -6,7 +6,13 @@
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src", "prisma", "prisma.config.ts"]
+  "include": [
+    "src",
+    "scripts"
+  ]
 }

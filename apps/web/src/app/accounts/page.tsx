@@ -1,19 +1,22 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { prisma } from "@ezly/db";
+import { getCurrentAgency } from "@/lib/store";
 
 async function AccountTable() {
   await connection();
-  const accounts = await prisma.account.findMany({
-    where: { deletedAt: null },
-    include: {
-      people: { where: { relationship: "primary" }, take: 1 },
-      addresses: { where: { isPrimary: true }, take: 1 },
-      producer: true,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  });
+  const { data } = await getCurrentAgency();
+  const [accounts, users] = await Promise.all([data.accounts.list((a) => !a.deletedAt), data.users.list()]);
+  const userName = new Map(users.map((u) => [u.id, u.name]));
+  const rows = accounts
+    .sort((x, y) => y.createdAt.localeCompare(x.createdAt))
+    .slice(0, 50)
+    .map((a) => ({
+      id: a.id,
+      person: a.people.find((p) => p.relationship === "primary") ?? a.people[0],
+      address: a.addresses.find((ad) => ad.isPrimary) ?? a.addresses[0],
+      producer: a.producerId ? userName.get(a.producerId) : undefined,
+      leadStatus: a.leadStatus,
+    }));
   return (
     <div className="overflow-x-auto rounded-lg border bg-white">
       <table className="w-full text-sm">
@@ -25,21 +28,17 @@ async function AccountTable() {
           </tr>
         </thead>
         <tbody>
-          {accounts.map((a) => {
-            const p = a.people[0];
-            const addr = a.addresses[0];
-            return (
-              <tr key={a.id} className="border-t">
-                <td className="px-3 py-2">{p?.lastName}</td>
-                <td className="px-3 py-2">{p?.firstName}</td>
-                <td className="px-3 py-2">{a.producer?.name}</td>
-                <td className="px-3 py-2">{addr?.city}</td>
-                <td className="px-3 py-2">{addr?.state}</td>
-                <td className="px-3 py-2">{addr?.zip}</td>
-                <td className="px-3 py-2">{a.leadStatus}</td>
-              </tr>
-            );
-          })}
+          {rows.map((r) => (
+            <tr key={r.id} className="border-t">
+              <td className="px-3 py-2">{r.person.lastName}</td>
+              <td className="px-3 py-2">{r.person.firstName}</td>
+              <td className="px-3 py-2">{r.producer}</td>
+              <td className="px-3 py-2">{r.address?.city}</td>
+              <td className="px-3 py-2">{r.address?.state}</td>
+              <td className="px-3 py-2">{r.address?.zip}</td>
+              <td className="px-3 py-2">{r.leadStatus}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

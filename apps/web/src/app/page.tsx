@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import { connection } from "next/server";
-import { prisma } from "@ezly/db";
+import { getCurrentAgency } from "@/lib/store";
 
 async function Stats() {
   await connection();
+  const { data } = await getCurrentAgency();
   const [accounts, leads, policies] = await Promise.all([
-    prisma.account.count({ where: { deletedAt: null } }),
-    prisma.account.count({ where: { deletedAt: null, leadStatus: { in: ["NEW", "CONTACTED"] } } }),
-    prisma.policy.count({ where: { status: "ACTIVE" } }),
+    data.accounts.count((a) => !a.deletedAt),
+    data.accounts.count((a) => !a.deletedAt && (a.leadStatus === "NEW" || a.leadStatus === "CONTACTED")),
+    data.policies.count((p) => p.status === "ACTIVE"),
   ]);
   const tiles = [
     { label: "Accounts", value: accounts },

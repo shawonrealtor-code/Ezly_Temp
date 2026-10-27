@@ -4,6 +4,6 @@ dist/
 coverage/
 .env
 .env.local
-packages/db/src/generated/
 playwright-report/
 test-results/
+.data/
