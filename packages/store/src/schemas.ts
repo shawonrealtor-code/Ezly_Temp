@@ -42,7 +42,35 @@ export const userSchema = z.object({
   role: z.enum(ROLES).default("CSR"),
   active: z.boolean().default(true),
   passwordHash: z.string().optional(),
+  /** Forces a password change at next sign-in (set for admin-created accounts). */
+  mustChangePassword: z.boolean().default(false),
+  failedLoginCount: z.number().int().min(0).default(0),
+  lockedUntil: isoDateTime.optional(),
+  lastLoginAt: isoDateTime.optional(),
+  /** Authenticator-app secret. Present but unconfirmed while the user is still enrolling. */
   mfaSecret: encrypted.optional(),
+  mfaConfirmedAt: isoDateTime.optional(),
+  /** Last accepted TOTP time step, so a code cannot be replayed. */
+  lastTotpStep: z.number().int().optional(),
+  /** SHA-256 hashes of unused one-time recovery codes. */
+  recoveryCodeHashes: z.array(z.string()).default([]),
+  /** Bumped to sign the user out everywhere (password change, role change, deactivation). */
+  sessionVersion: z.number().int().min(0).default(0),
+});
+
+export const sessionSchema = z.object({
+  ...tenant,
+  /** SHA-256 of the cookie token; the token itself is never stored. */
+  tokenHash: z.string().regex(/^[0-9a-f]{64}$/),
+  userId: z.uuid(),
+  /** False while the user has entered their password but not yet their MFA code. */
+  mfaVerified: z.boolean(),
+  mfaAttempts: z.number().int().min(0).default(0),
+  sessionVersion: z.number().int().min(0),
+  lastSeenAt: isoDateTime,
+  expiresAt: isoDateTime,
+  ip: z.string().optional(),
+  userAgent: z.string().max(300).optional(),
 });
 
 export const carrierSchema = z.object({
@@ -172,6 +200,22 @@ export const taskSchema = z.object({
   priority: z.enum(["low", "normal", "high"]).default("normal"),
 });
 
+export const CHANGE_ACTIONS = ["create", "update", "delete"] as const;
+export const AUTH_ACTIONS = [
+  "login.success",
+  "login.failure",
+  "login.locked",
+  "mfa.enrolled",
+  "mfa.success",
+  "mfa.failure",
+  "mfa.recovery_used",
+  "mfa.reset",
+  "logout",
+  "password.changed",
+  "user.unlocked",
+] as const;
+export type AuthAction = (typeof AUTH_ACTIONS)[number];
+
 export const auditEntrySchema = z.object({
   id: z.uuid(),
   at: isoDateTime,
@@ -179,8 +223,11 @@ export const auditEntrySchema = z.object({
   actorId: z.uuid().nullable(),
   collection: z.string(),
   recordId: z.string(),
-  action: z.enum(["create", "update", "delete"]),
+  action: z.enum([...CHANGE_ACTIONS, ...AUTH_ACTIONS]),
   changes: z.record(z.string(), z.unknown()).optional(),
+  ip: z.string().optional(),
+  userAgent: z.string().optional(),
+  detail: z.string().optional(),
 });
 
 type BaseKeys = "id" | "createdAt" | "updatedAt" | "agencyId";
@@ -197,9 +244,11 @@ export type QuoteRun = z.output<typeof quoteRunSchema>;
 export type Policy = z.output<typeof policySchema>;
 export type Task = z.output<typeof taskSchema>;
 export type AuditEntry = z.output<typeof auditEntrySchema>;
+export type Session = z.output<typeof sessionSchema>;
 
 export type AgencyInput = Omit<z.input<typeof agencySchema>, "id" | "createdAt" | "updatedAt">;
 export type UserInput = Input<typeof userSchema>;
+export type SessionInput = Input<typeof sessionSchema>;
 export type CarrierInput = Input<typeof carrierSchema>;
 export type AccountInput = Input<typeof accountSchema>;
 export type ApplicationInput = Input<typeof applicationSchema>;

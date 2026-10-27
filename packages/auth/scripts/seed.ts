@@ -1,10 +1,14 @@
 // Fills a data directory with a demo agency and fake clients. Never seed real customer data.
-// Usage: EZLY_DATA_DIR=... EZLY_FIELD_KEY=... pnpm --filter @ezly/store seed [--reset]
+// Usage: EZLY_DATA_DIR=... EZLY_FIELD_KEY=... pnpm seed [--reset]
 import { rm } from "node:fs/promises";
 import { join } from "node:path";
 import { faker } from "@faker-js/faker";
 import { simulatedCarriers } from "@ezly/rating";
-import { LEAD_STATUSES, LOBS, createStore } from "../src/index.ts";
+import { LEAD_STATUSES, LOBS, createStore } from "@ezly/store";
+import { hashPassword } from "../src/index.ts";
+
+/** Shared password for the fake demo users. Development data only. */
+const DEMO_PASSWORD = "Ezly-demo-pass-2026";
 
 const dataDir = process.env.EZLY_DATA_DIR;
 const fieldKey = process.env.EZLY_FIELD_KEY;
@@ -30,9 +34,11 @@ const addDays = (d: Date, days: number) => new Date(d.getTime() + days * 86_400_
 
 const agency = await store.agencies.create({ name: "Demo Agency", states: ["MD", "VA"] }, { actorId: null });
 const a = store.forAgency(agency.id);
-const producer = await a.users.create({ email: "producer@demo.ezly", name: "Jordan Mitchell", role: "PRODUCER" });
-const csr = await a.users.create({ email: "csr@demo.ezly", name: "Lena Park", role: "CSR" });
-await a.users.create({ email: "admin@demo.ezly", name: "Demo Admin", role: "ADMIN" });
+const passwordHash = await hashPassword(DEMO_PASSWORD);
+await a.users.create({ email: "admin@demo.ezly", name: "Demo Admin", role: "ADMIN", passwordHash });
+const producer = await a.users.create({ email: "producer@demo.ezly", name: "Jordan Mitchell", role: "PRODUCER", passwordHash });
+const csr = await a.users.create({ email: "csr@demo.ezly", name: "Lena Park", role: "CSR", passwordHash });
+await a.users.create({ email: "viewer@demo.ezly", name: "Read Only", role: "READ_ONLY", passwordHash });
 
 const carriers = [];
 for (const c of simulatedCarriers) {
@@ -96,4 +102,6 @@ for (let i = 0; i < 50; i++) {
   }
 }
 
-console.log(`Seeded ${dataDir}: agency "${agency.name}" with 3 users, ${carriers.length} carriers and 50 fake clients.`);
+console.log(`Seeded ${dataDir}: agency "${agency.name}", ${carriers.length} carriers, 50 fake clients.`);
+console.log(`Demo sign-ins (password "${DEMO_PASSWORD}", MFA set up on first sign-in):`);
+console.log("  admin@demo.ezly · producer@demo.ezly · csr@demo.ezly · viewer@demo.ezly");

@@ -1,0 +1,30 @@
+{
+  "name": "@ezly/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./policy": "./src/policy.ts",
+    "./permissions": "./src/permissions.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "create-user": "tsx scripts/create-user.ts",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@ezly/store": "workspace:*",
+    "@node-rs/argon2": "2.2.2",
+    "otpauth": "9.5.2"
+  },
+  "devDependencies": {
+    "@ezly/rating": "workspace:*",
+    "@faker-js/faker": "^10",
+    "@types/node": "^22",
+    "tsx": "^4",
+    "typescript": "^5",
+    "vitest": "^5.0.5"
+  }
+}

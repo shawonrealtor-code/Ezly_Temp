@@ -15,6 +15,8 @@ export interface WriteContext {
   actorId: string | null;
   /** When set, the record must belong to this agency or the write fails as "not found". */
   agencyId?: string;
+  /** Skips the audit log. Only for bookkeeping that is logged another way (e.g. sign-in counters). */
+  silent?: boolean;
 }
 
 export type WriteEvent<T> =
@@ -68,7 +70,7 @@ export class Collection<S extends z.ZodType<StoredRecord>> {
       this.assertUnique(records, record);
       records.set(record.id, record);
     });
-    await this.options.onWrite?.({ action: "create", record, ctx });
+    if (!ctx.silent) await this.options.onWrite?.({ action: "create", record, ctx });
     return record;
   }
 
@@ -82,7 +84,7 @@ export class Collection<S extends z.ZodType<StoredRecord>> {
       records.set(id, record);
       return { before, record };
     });
-    await this.options.onWrite?.({ action: "update", before, record, ctx });
+    if (!ctx.silent) await this.options.onWrite?.({ action: "update", before, record, ctx });
     return record;
   }
 
@@ -92,7 +94,18 @@ export class Collection<S extends z.ZodType<StoredRecord>> {
       records.delete(id);
       return before;
     });
-    await this.options.onWrite?.({ action: "delete", before, ctx });
+    if (!ctx.silent) await this.options.onWrite?.({ action: "delete", before, ctx });
+  }
+
+  /** Deletes every matching record in a single write. Returns how many were removed. */
+  async removeWhere(filter: (record: z.output<S>) => boolean, ctx: WriteContext): Promise<number> {
+    const removed = await this.mutate((records) => {
+      const doomed = [...records.values()].filter(filter);
+      for (const record of doomed) records.delete(record.id);
+      return doomed;
+    });
+    if (!ctx.silent) for (const before of removed) await this.options.onWrite?.({ action: "delete", before, ctx });
+    return removed.length;
   }
 
   private validate(value: unknown): z.output<S> {

@@ -10,6 +10,7 @@ import {
   carrierSchema,
   policySchema,
   quoteRunSchema,
+  sessionSchema,
   taskSchema,
   userSchema,
 } from "./schemas.ts";
@@ -90,7 +91,16 @@ export function createStore({ dataDir, fieldKeys }: StoreOptions) {
     agencies: make("agencies", agencySchema),
     /** Global user lookup, needed for sign-in before the agency is known. */
     usersByEmail: async (email: string) =>
-      (await tenantCollections.users.list((u) => u.email === email.toLowerCase()))[0] ?? null,
+      (await tenantCollections.users.list((u) => u.email === email.trim().toLowerCase()))[0] ?? null,
+    /**
+     * Unscoped access for the sign-in system only (it runs before the agency is known).
+     * Application code must use forAgency().
+     */
+    internal: {
+      users: tenantCollections.users,
+      // Sessions change on every sign-in and are not audited as record changes; sign-in events are logged instead.
+      sessions: new Collection("sessions", collectionsDir, sessionSchema, { uniqueBy: (s) => s.tokenHash, uniqueLabel: "token" }),
+    },
     /** Everything an agency's staff work with, limited to that agency. */
     forAgency(agencyId: string, actorId: string | null = null) {
       const scope = <S extends TenantSchema>(c: Collection<S>) => new AgencyCollection(c, agencyId, actorId);

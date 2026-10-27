@@ -9,6 +9,7 @@
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "keygen": "pnpm --filter @ezly/store keygen",
-    "seed": "pnpm --filter @ezly/store seed"
+    "seed": "pnpm --filter @ezly/auth seed",
+    "create-user": "pnpm --filter @ezly/auth create-user"
   }
 }

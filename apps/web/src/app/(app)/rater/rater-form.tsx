@@ -9,11 +9,10 @@ const money = (n: number) => n.toLocaleString("en-US", { style: "currency", curr
 const field = "flex flex-col gap-1 text-sm text-slate-600";
 const input = "rounded border px-2 py-1 text-slate-900";
 
-export default function RaterPage() {
+export function RaterForm() {
   const [state, formAction, pending] = useActionState<RateState, FormData>(rateAction, null);
   return (
     <>
-      <h1 className="mb-4 text-xl font-semibold">Quote Rater</h1>
       <form action={formAction} className="mb-6 grid gap-3 rounded-lg border bg-white p-4 sm:grid-cols-3">
         <label className={field}>Line
           <select name="lob" className={input}>

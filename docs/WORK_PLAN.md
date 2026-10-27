@@ -70,7 +70,7 @@ order; each one lists what it needs from earlier ones.
 
 **Done when:** tests pass and the existing dashboard/accounts pages read from JSON.
 
-### Segment 2 — Logins, roles and security basics
+### Segment 2 — Logins, roles and security basics  ✅ *done 2026-10-27*
 
 - Sign-in with email + password (Argon2 hashing), **required MFA** with an authenticator
   app (free), session timeouts, lockout after failed attempts.

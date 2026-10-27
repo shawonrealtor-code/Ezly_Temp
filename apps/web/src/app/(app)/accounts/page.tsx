@@ -1,10 +1,7 @@
-import { Suspense } from "react";
-import { connection } from "next/server";
-import { getCurrentAgency } from "@/lib/store";
+import { requireUser } from "@/lib/auth";
 
-async function AccountTable() {
-  await connection();
-  const { data } = await getCurrentAgency();
+export default async function AccountsPage() {
+  const { data } = await requireUser("accounts:read");
   const [accounts, users] = await Promise.all([data.accounts.list((a) => !a.deletedAt), data.users.list()]);
   const userName = new Map(users.map((u) => [u.id, u.name]));
   const rows = accounts
@@ -18,6 +15,8 @@ async function AccountTable() {
       leadStatus: a.leadStatus,
     }));
   return (
+    <>
+    <h1 className="mb-4 text-xl font-semibold">Accounts</h1>
     <div className="overflow-x-auto rounded-lg border bg-white">
       <table className="w-full text-sm">
         <thead className="bg-slate-100 text-left">
@@ -42,16 +41,6 @@ async function AccountTable() {
         </tbody>
       </table>
     </div>
-  );
-}
-
-export default function AccountsPage() {
-  return (
-    <>
-      <h1 className="mb-4 text-xl font-semibold">Accounts</h1>
-      <Suspense fallback={<p>Loading…</p>}>
-        <AccountTable />
-      </Suspense>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import "server-only";
 import { resolve } from "node:path";
 import { createStore, type Store } from "@ezly/store";
 
@@ -16,12 +17,4 @@ export function getStore(): Store {
     });
   }
   return store;
-}
-
-/** Until sign-in exists (Segment 2), pages show the first agency's data. */
-export async function getCurrentAgency() {
-  const store = getStore();
-  const [agency] = await store.agencies.list();
-  if (!agency) throw new Error("No agency found. Seed demo data with `pnpm seed`.");
-  return { agency, data: store.forAgency(agency.id) };
 }

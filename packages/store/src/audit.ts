@@ -3,7 +3,7 @@ import { appendFile, mkdir, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { isEncrypted } from "./crypto.ts";
 import { Mutex, readIfExists } from "./files.ts";
-import { auditEntrySchema, type AuditEntry } from "./schemas.ts";
+import { auditEntrySchema, type AuditEntry, type AuthAction } from "./schemas.ts";
 import type { StoredRecord, WriteEvent } from "./collection.ts";
 
 /** Append-only audit trail, one JSON line per change, one file per month. */
@@ -26,6 +26,36 @@ export class AuditLog {
       action: event.action,
       changes: event.action === "update" ? diff(before!, after!) : event.action === "create" ? redact(after) : undefined,
     });
+    await this.append(entry);
+  }
+
+  /** Records a sign-in or security event (not tied to a record change). */
+  async event(event: {
+    action: AuthAction;
+    agencyId: string | null;
+    actorId: string | null;
+    userId?: string;
+    ip?: string;
+    userAgent?: string;
+    detail?: string;
+  }): Promise<void> {
+    await this.append(
+      auditEntrySchema.parse({
+        id: randomUUID(),
+        at: new Date().toISOString(),
+        agencyId: event.agencyId,
+        actorId: event.actorId,
+        collection: "auth",
+        recordId: event.userId ?? "unknown",
+        action: event.action,
+        ip: event.ip,
+        userAgent: event.userAgent?.slice(0, 300),
+        detail: event.detail,
+      }),
+    );
+  }
+
+  private async append(entry: AuditEntry): Promise<void> {
     await this.mutex.run(async () => {
       await mkdir(this.dir, { recursive: true, mode: 0o700 });
       await appendFile(join(this.dir, `audit-${entry.at.slice(0, 7)}.jsonl`), `${JSON.stringify(entry)}\n`, {
@@ -55,6 +85,7 @@ export class AuditLog {
 }
 
 const IGNORED = new Set(["updatedAt"]);
+const SECRET_KEYS = new Set(["passwordHash", "recoveryCodeHashes", "tokenHash"]);
 
 function diff(before: StoredRecord, after: StoredRecord): Record<string, unknown> {
   const changes: Record<string, unknown> = {};
@@ -73,7 +104,7 @@ function redact(value: unknown): Record<string, unknown> | unknown {
   if (Array.isArray(value)) return value.map(redact);
   if (value && typeof value === "object") {
     return Object.fromEntries(
-      Object.entries(value).map(([k, v]) => [k, k === "passwordHash" ? "[redacted]" : redact(v)]),
+      Object.entries(value).map(([k, v]) => [k, SECRET_KEYS.has(k) ? "[redacted]" : redact(v)]),
     );
   }
   return value;

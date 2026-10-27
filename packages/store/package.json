@@ -3,19 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "exports": { ".": "./src/index.ts" },
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "keygen": "tsx scripts/keygen.ts",
-    "seed": "tsx scripts/seed.ts"
+    "keygen": "tsx scripts/keygen.ts"
   },
   "dependencies": {
-    "@ezly/rating": "workspace:*",
     "zod": "^4.1.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^10",
     "@types/node": "^22",
     "tsx": "^4",
     "typescript": "^5",
