@@ -10,6 +10,7 @@ export const PERMISSIONS = {
   "dashboard:view": ALL,
   "accounts:read": ALL,
   "accounts:write": STAFF,
+  "accounts:import": ["ADMIN"],
   "quotes:run": STAFF,
   "policies:write": STAFF,
   "restricted:reveal": ["ADMIN"],

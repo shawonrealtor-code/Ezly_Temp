@@ -188,3 +188,21 @@ describe("audit log", () => {
     expect(await store.forAgency(agencyB).auditTrail()).toEqual([]);
   });
 });
+
+describe("bulk writes", () => {
+  it("creates many records in one write and validates all before saving any", async () => {
+    const accounts = store.forAgency(agencyA).accounts;
+    const created = await accounts.createMany([account(), account(), account()]);
+    expect(created).toHaveLength(3);
+    await expect(accounts.createMany([account(), { people: [] }])).rejects.toMatchObject({ code: "VALIDATION" });
+    expect(await accounts.count()).toBe(3);
+    expect((await store.forAgency(agencyA).auditTrail()).filter((e) => e.action === "create" && e.collection === "accounts")).toHaveLength(3);
+  });
+
+  it("removes only the calling agency's matching records", async () => {
+    await store.forAgency(agencyA).accounts.createMany([account({ vip: true }), account()]);
+    await store.forAgency(agencyB).accounts.create(account({ vip: true }));
+    expect(await store.forAgency(agencyA).accounts.removeWhere((a) => a.vip)).toBe(1);
+    expect(await store.forAgency(agencyB).accounts.count()).toBe(1);
+  });
+});

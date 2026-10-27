@@ -16,7 +16,11 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  transpilePackages: ["@ezly/auth", "@ezly/rating", "@ezly/store"],
+  transpilePackages: ["@ezly/auth", "@ezly/core", "@ezly/rating", "@ezly/store"],
+  experimental: {
+    // Client imports send up to 10,000 rows in one request; everything else stays far below this.
+    serverActions: { bodySizeLimit: "8mb" },
+  },
   // Native password-hashing module: load it from node_modules at runtime instead of bundling it.
   serverExternalPackages: ["@node-rs/argon2"],
   async headers() {

@@ -3,8 +3,10 @@ import { z } from "zod";
 import { AuditLog } from "./audit.ts";
 import { Collection, type StoredRecord, type WriteContext } from "./collection.ts";
 import { FieldCipher } from "./crypto.ts";
+import type { AuthAction } from "./schemas.ts";
 import {
   accountSchema,
+  activitySchema,
   agencySchema,
   applicationSchema,
   carrierSchema,
@@ -45,6 +47,15 @@ export class AgencyCollection<S extends TenantSchema> {
     return this.inner.create({ ...input, agencyId: this.agencyId } as never, this.ctx());
   }
 
+  createMany(inputs: Omit<z.input<S>, "id" | "createdAt" | "updatedAt" | "agencyId">[]): Promise<z.output<S>[]> {
+    return this.inner.createMany(inputs.map((input) => ({ ...input, agencyId: this.agencyId }) as never), this.ctx());
+  }
+
+  /** Deletes this agency's records that match, in one write. */
+  removeWhere(filter: (record: z.output<S>) => boolean): Promise<number> {
+    return this.inner.removeWhere((r) => r.agencyId === this.agencyId && filter(r), this.ctx());
+  }
+
   update(id: string, patch: Partial<z.input<S>>): Promise<z.output<S>> {
     return this.inner.update(id, patch, this.ctx());
   }
@@ -78,6 +89,7 @@ export function createStore({ dataDir, fieldKeys }: StoreOptions) {
     users: make("users", userSchema, { uniqueBy: (u) => u.email, uniqueLabel: "email" }),
     carriers: make("carriers", carrierSchema, { uniqueBy: (c) => `${c.agencyId}:${c.adapterKey}`, uniqueLabel: "carrier key" }),
     accounts: make("accounts", accountSchema),
+    activities: make("activities", activitySchema),
     applications: make("applications", applicationSchema),
     quoteRuns: make("quoteRuns", quoteRunSchema),
     policies: make("policies", policySchema),
@@ -108,11 +120,15 @@ export function createStore({ dataDir, fieldKeys }: StoreOptions) {
         users: scope(tenantCollections.users),
         carriers: scope(tenantCollections.carriers),
         accounts: scope(tenantCollections.accounts),
+        activities: scope(tenantCollections.activities),
         applications: scope(tenantCollections.applications),
         quoteRuns: scope(tenantCollections.quoteRuns),
         policies: scope(tenantCollections.policies),
         tasks: scope(tenantCollections.tasks),
         auditTrail: (recordId?: string, limit?: number) => audit.list({ agencyId, recordId, limit }),
+        /** Logs a security-relevant action by this user (e.g. revealing an SSN, exporting data). */
+        logEvent: (action: AuthAction, detail: string, recordId?: string, meta: { ip?: string; userAgent?: string } = {}) =>
+          audit.event({ action, agencyId, actorId, userId: recordId, detail, ...meta }),
       };
     },
   };

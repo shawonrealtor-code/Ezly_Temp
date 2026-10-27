@@ -11,13 +11,15 @@
   },
   "dependencies": {
     "@ezly/auth": "workspace:*",
+    "@ezly/core": "workspace:*",
     "@ezly/rating": "workspace:*",
     "@ezly/store": "workspace:*",
     "next": "16.4.2",
     "qrcode": "1.5.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "server-only": "0.0.1"
+    "server-only": "0.0.1",
+    "zod": "^4.1.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",

@@ -80,7 +80,7 @@ order; each one lists what it needs from earlier ones.
 
 **Done when:** staff can sign in with MFA, and each role sees only what it should.
 
-### Segment 3 — Clients (Accounts)
+### Segment 3 — Clients (Accounts)  ✅ *done 2026-10-27*
 
 - Client list with search and filters (mockup: Accounts).
 - New client form in steps with "required to save" vs "required to rate" checks and the

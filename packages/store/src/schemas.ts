@@ -145,11 +145,30 @@ export const accountSchema = z.object({
   leadSource: optionalText,
   leadStatus: z.enum(LEAD_STATUSES).default("NEW"),
   leadPriority: z.enum(["low", "normal", "high"]).optional(),
+  probabilityOfSale: z.number().int().min(0).max(100).optional(),
+  preferredContact: z.enum(["text", "call", "email"]).optional(),
+  contactTime: optionalText,
+  /** Whether the client's email may be sent to carriers when rating. */
+  shareEmailWithCarriers: z.boolean().default(false),
+  /** Set on clients created by a CSV import, so the import can be undone. */
+  importBatchId: z.uuid().optional(),
   people: z.array(personSchema).min(1),
   addresses: z.array(addressSchema).default([]),
   phones: z.array(phoneSchema).default([]),
   emails: z.array(emailSchema).default([]),
   deletedAt: isoDateTime.optional(),
+});
+
+export const ACTIVITY_KINDS = ["note", "call", "email", "text", "meeting"] as const;
+
+/** A note or a logged conversation on a client's timeline. */
+export const activitySchema = z.object({
+  ...tenant,
+  accountId: z.uuid(),
+  kind: z.enum(ACTIVITY_KINDS).default("note"),
+  body: z.string().trim().min(1).max(5000),
+  occurredAt: isoDateTime,
+  authorId: z.uuid(),
 });
 
 export const applicationSchema = z.object({
@@ -213,6 +232,10 @@ export const AUTH_ACTIONS = [
   "logout",
   "password.changed",
   "user.unlocked",
+  "data.revealed",
+  "data.exported",
+  "data.imported",
+  "data.import_undone",
 ] as const;
 export type AuthAction = (typeof AUTH_ACTIONS)[number];
 
@@ -245,12 +268,14 @@ export type Policy = z.output<typeof policySchema>;
 export type Task = z.output<typeof taskSchema>;
 export type AuditEntry = z.output<typeof auditEntrySchema>;
 export type Session = z.output<typeof sessionSchema>;
+export type Activity = z.output<typeof activitySchema>;
 
 export type AgencyInput = Omit<z.input<typeof agencySchema>, "id" | "createdAt" | "updatedAt">;
 export type UserInput = Input<typeof userSchema>;
 export type SessionInput = Input<typeof sessionSchema>;
 export type CarrierInput = Input<typeof carrierSchema>;
 export type AccountInput = Input<typeof accountSchema>;
+export type ActivityInput = Input<typeof activitySchema>;
 export type ApplicationInput = Input<typeof applicationSchema>;
 export type QuoteRunInput = Input<typeof quoteRunSchema>;
 export type PolicyInput = Input<typeof policySchema>;

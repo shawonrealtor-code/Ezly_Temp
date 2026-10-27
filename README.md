@@ -9,6 +9,7 @@ rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md),
 | Path | What |
 |---|---|
 | `apps/web` | Next.js app (UI + server) |
+| `packages/core` | Browser-safe client logic: "ready to rate" checklist, search, duplicate detection, CSV import parsing and column matching |
 | `packages/auth` | Sign-in: Argon2id passwords, authenticator-app codes, recovery codes, sessions, lockout, roles and permissions |
 | `packages/store` | JSON-file data storage: safe writes, locking, validation, SSN/DL encryption, agency isolation, audit log |
 | `packages/rating` | `RatingAdapter` interface, simulated carriers, `rateAll` |
@@ -48,6 +49,19 @@ EZLY_DATA_DIR=... EZLY_FIELD_KEY=... pnpm create-user --agency-name "Saha Agency
   HSTS, frame, MIME-sniffing, referrer and permissions headers (`next.config.ts`). Cache
   Components / partial prerendering are off because nonces can't be added to prerendered pages.
 - Admins manage users at **Users** and review sign-ins and changes at **Activity log**.
+
+### Clients
+- **Clients** list: search (name, email, phone, ZIP, policy #), filters, sorting, 25 per page.
+- **New client**: four steps with a live "Ready to rate?" checklist; only first and last name are
+  needed to save. Possible duplicates (same name + birth date, email, phone, or name + ZIP) are
+  flagged before saving.
+- Client page: Overview, Details, Lead info and Activity (notes, calls, and a full change history).
+  Call / text / email buttons open the staff member's own phone or mail app (no texting fees).
+- SSNs and license numbers are masked; admins can reveal one after giving a reason, which is logged.
+- **Import** (admins): CSV from EZLynx or Excel, automatic column matching, a check step showing
+  errors, cleaned-up values and likely duplicates, and **Undo this import**. Only mapped columns
+  leave the browser. A template is at `apps/web/public/client-import-template.csv`.
+- **Export CSV** (admins): never includes SSNs or license numbers; every export is logged.
 
 Checks: `pnpm lint && pnpm typecheck && pnpm test && pnpm build`.
 

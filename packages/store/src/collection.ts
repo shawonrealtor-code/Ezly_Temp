@@ -74,6 +74,20 @@ export class Collection<S extends z.ZodType<StoredRecord>> {
     return record;
   }
 
+  /** Creates many records in a single write (used by imports). All are validated before anything is saved. */
+  async createMany(inputs: Omit<z.input<S>, "id" | "createdAt" | "updatedAt">[], ctx: WriteContext): Promise<z.output<S>[]> {
+    const now = new Date().toISOString();
+    const created = inputs.map((input) => this.validate({ ...input, id: randomUUID(), createdAt: now, updatedAt: now }));
+    await this.mutate((records) => {
+      for (const record of created) {
+        this.assertUnique(records, record);
+        records.set(record.id, record);
+      }
+    });
+    if (!ctx.silent) for (const record of created) await this.options.onWrite?.({ action: "create", record, ctx });
+    return created;
+  }
+
   async update(id: string, patch: Partial<z.input<S>>, ctx: WriteContext): Promise<z.output<S>> {
     const changes: Record<string, unknown> = { ...patch };
     for (const key of IMMUTABLE_KEYS) delete changes[key];
