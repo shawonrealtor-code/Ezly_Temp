@@ -330,7 +330,7 @@ apps/web/                 Next.js app (UI + API)
   app/(shell)/dashboard
   app/(shell)/accounts/[id]/{overview,policies,details,quotes,lead,documents,requests,activity}
   app/api/v1/...
-packages/db/              Prisma schema, migrations, seed
+packages/store/           JSON-file storage, schemas, encryption, seed (replaces Prisma/Postgres; see WORK_PLAN)
 packages/rating/          RatingAdapter interface, simulated adapter, rating tables
 packages/validation/      Zod schemas shared by forms + API (save vs rate rules)
 packages/ui/              Shared components (DataTable, FormSection, AccountSidebar)

@@ -8,6 +8,7 @@ Version 1.0 · 2026-10-26
 |---|---|
 | Hosting | Saha Agency's existing **Hostinger** account. Ezly runs on that server; no other hosting. |
 | Third-party services | None that cost money. Everything runs on the Hostinger server itself. |
+| Domain | Hostinger's free temporary address while building; `app.` + the agency's own domain at go-live (Segment 8). |
 | Database | **JSON files** on the server, behind a storage layer so it can be swapped for SQLite/PostgreSQL later without changing the app. |
 | Spending | **$0 extra.** No paid plans, APIs, or services. Anything that would cost money is left out or replaced with a free built-in alternative. |
 | Insurers | Simulated insurers until real access is arranged. |
@@ -58,7 +59,7 @@ order; each one lists what it needs from earlier ones.
 
 **Done when:** a "Hello from Ezly" page loads at the subdomain over HTTPS.
 
-### Segment 1 — JSON storage layer
+### Segment 1 — JSON storage layer  ✅ *done 2026-10-27*
 
 - Replace Prisma/PostgreSQL with a `packages/store` module: collections (agencies, users,
   accounts, applications, quotes, policies, tasks, documents, audit log) stored as JSON.
