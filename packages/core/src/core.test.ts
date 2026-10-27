@@ -13,6 +13,7 @@ import {
   parseDate,
   parseState,
   ratingReadiness,
+  type DuplicateCandidate,
 } from "./index.ts";
 
 const today = new Date("2026-10-27T12:00:00Z");
@@ -71,7 +72,7 @@ describe("duplicates", () => {
   const index = new DuplicateIndex([existing]);
 
   it("finds matches by name + DOB, email, phone, or name + ZIP, ignoring accents and case", () => {
-    const match = (c: Partial<typeof existing>) =>
+    const match = (c: Partial<DuplicateCandidate>) =>
       index.find({ people: [], addresses: [], phones: [], emails: [], ...c }).map((m) => m.reasons).flat();
     expect(match({ people: [{ firstName: "maria", lastName: "ORTEGA", dateOfBirth: "1984-03-07" }] })).toContain("name and date of birth");
     expect(match({ emails: [{ address: "Maria@Example.com" }] })).toEqual(["email"]);
