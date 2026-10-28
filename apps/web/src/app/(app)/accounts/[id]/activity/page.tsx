@@ -1,10 +1,11 @@
+import type { Activity } from "@ezly/store";
 import { Icon, type IconName } from "@/components/icons";
 import { Card, CardHeader, EmptyState, dateFmt } from "@/components/ui";
 import { loadAccountPage } from "@/lib/accounts";
 import { requireUser } from "@/lib/auth";
 import { ActivityForm } from "./activity-form";
 
-const KIND_ICON: Record<string, IconName> = { note: "note", call: "phone", email: "mail", text: "message", meeting: "accounts" };
+const KIND_ICON: Record<Activity["kind"], IconName> = { note: "note", call: "phone", email: "mail", text: "message", meeting: "accounts", quote: "quotes" };
 const FIELD_LABELS: Record<string, string> = {
   people: "applicant details", addresses: "address", phones: "phone numbers", emails: "email", leadStatus: "status",
   leadSource: "lead source", leadPriority: "priority", producerId: "producer", csrId: "CSR", customerSince: "customer since",
@@ -23,7 +24,7 @@ export default async function ActivityTab({ params }: PageProps<"/accounts/[id]/
     ...activities.map((a) => ({
       at: a.occurredAt,
       icon: KIND_ICON[a.kind],
-      title: a.kind === "note" ? "Note" : `${a.kind.charAt(0).toUpperCase()}${a.kind.slice(1)} logged`,
+      title: a.kind === "note" ? "Note" : a.kind === "quote" ? "Quote run" : `${a.kind.charAt(0).toUpperCase()}${a.kind.slice(1)} logged`,
       body: a.body,
       who: userName.get(a.authorId) ?? "Unknown user",
     })),

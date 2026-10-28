@@ -17,22 +17,24 @@ export const IMPORT_FIELDS = [
   { key: "ssn", label: "SSN", aliases: ["ssn", "social security", "social security number", "ss", "ssn number"] },
   { key: "dlNumber", label: "Driver's license #", aliases: ["driver license", "drivers license", "driver s license", "dl", "dl number", "license number", "drivers license number"] },
   { key: "dlState", label: "License state", aliases: ["dl state", "license state", "drivers license state"] },
-  { key: "email", label: "Email", aliases: ["email", "e mail", "email address", "primary email"] },
-  { key: "phone", label: "Phone", aliases: ["phone", "phone number", "mobile", "cell", "cell phone", "mobile phone", "home phone", "primary phone"] },
+  { key: "email", label: "Email", aliases: ["email", "e mail", "email address", "primary email", "email 1"] },
+  { key: "phone", label: "Phone", aliases: ["phone", "phone number", "mobile", "cell", "cell phone", "mobile phone", "home phone", "primary phone", "mobile number", "cell number"] },
   { key: "phone2", label: "Second phone", aliases: ["work phone", "alternate phone", "other phone", "phone 2", "secondary phone", "business phone"] },
-  { key: "line1", label: "Street address", aliases: ["address", "address 1", "address1", "street", "street address", "address line 1", "mailing address"] },
-  { key: "line2", label: "Address line 2 / unit", aliases: ["address 2", "address2", "address line 2", "apt", "unit", "suite"] },
+  { key: "line1", label: "Street address", aliases: ["address", "address 1", "address1", "street", "street address", "address line 1", "address line1", "mailing address", "mailing address line 1"] },
+  { key: "line2", label: "Address line 2 / unit", aliases: ["address 2", "address2", "address line 2", "address line2", "apt", "unit", "suite"] },
   { key: "city", label: "City", aliases: ["city", "town"] },
   { key: "county", label: "County", aliases: ["county"] },
   { key: "state", label: "State", aliases: ["state", "st", "province"] },
   { key: "zip", label: "ZIP", aliases: ["zip", "zip code", "zipcode", "postal code", "postal", "zip postal code"] },
+  { key: "zip4", label: "ZIP+4", aliases: ["postal code suffix", "zip4", "zip 4", "zip suffix", "plus 4"] },
   { key: "coFirstName", label: "Co-applicant first name", aliases: ["co applicant first name", "coapplicant first name", "spouse first name", "co first name"] },
   { key: "coLastName", label: "Co-applicant last name", aliases: ["co applicant last name", "coapplicant last name", "spouse last name", "co last name"] },
-  { key: "coDateOfBirth", label: "Co-applicant date of birth", aliases: ["co applicant dob", "coapplicant dob", "spouse dob", "spouse date of birth", "co applicant date of birth"] },
+  { key: "coDateOfBirth", label: "Co-applicant date of birth", aliases: ["co applicant dob", "coapplicant dob", "spouse dob", "spouse date of birth", "co applicant date of birth", "co applicant birth date"] },
   { key: "leadSource", label: "Lead source", aliases: ["lead source", "source", "referral source"] },
   { key: "leadStatus", label: "Lead status", aliases: ["lead status", "status", "client status"] },
   { key: "customerSince", label: "Customer since", aliases: ["customer since", "client since", "since"] },
-  { key: "producer", label: "Producer", aliases: ["producer", "assigned producer", "agent", "assigned agent"] },
+  { key: "producer", label: "Producer", aliases: ["producer", "assigned producer", "agent", "assigned agent", "producer name"] },
+  { key: "csr", label: "CSR", aliases: ["csr", "assigned csr", "customer service rep", "customer service representative", "account manager"] },
 ] as const;
 
 export type ImportField = (typeof IMPORT_FIELDS)[number]["key"];
@@ -62,6 +64,7 @@ export interface ImportedAccount {
   leadStatus?: "NEW" | "CONTACTED" | "QUOTED" | "SOLD" | "LOST";
   customerSince?: string;
   producer?: string;
+  csr?: string;
 }
 
 export interface ImportedRow {
@@ -81,12 +84,19 @@ export function parseCsv(text: string): { headers: string[]; rows: string[][]; e
 }
 
 const normalizeHeader = (h: string) => fold(h).replace(/[^a-z0-9]+/g, " ").trim();
+/** "Applicant First Name", "Insured DOB", "Primary Address Line 1" → also try without the prefix. */
+const headerVariants = (h: string) => {
+  const n = normalizeHeader(h);
+  const stripped = n.replace(/^(applicant|insured|primary|client|customer|contact|named insured) /, "");
+  return stripped === n ? [n] : [n, stripped];
+};
 
 export function guessMapping(headers: string[]): Mapping {
   const mapping: Mapping = {};
   const used = new Set<number>();
   for (const field of IMPORT_FIELDS) {
-    const index = headers.findIndex((h, i) => !used.has(i) && (field.aliases as readonly string[]).includes(normalizeHeader(h)));
+    const aliases = field.aliases as readonly string[];
+    const index = headers.findIndex((h, i) => !used.has(i) && headerVariants(h).some((v) => aliases.includes(v)));
     if (index >= 0) {
       mapping[field.key] = index;
       used.add(index);
@@ -216,7 +226,7 @@ export function mapRow(row: string[], mapping: Mapping, line: number, today = ne
         county: get("county") || undefined,
         state,
         zip: zipDigits.slice(0, 5),
-        zip4: zipDigits.length === 9 ? zipDigits.slice(5) : undefined,
+        zip4: zipDigits.length === 9 ? zipDigits.slice(5) : digits(get("zip4")).length === 4 ? digits(get("zip4")) : undefined,
         isPrimary: true,
       });
     } else {
@@ -234,6 +244,8 @@ export function mapRow(row: string[], mapping: Mapping, line: number, today = ne
   account.customerSince = date("customerSince", 100);
   const producer = get("producer");
   if (producer) account.producer = producer;
+  const csr = get("csr");
+  if (csr) account.csr = csr;
 
   return { line, account, errors, warnings };
 }

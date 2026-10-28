@@ -12,7 +12,7 @@ rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md),
 | `packages/core` | Browser-safe client logic: "ready to rate" checklist, search, duplicate detection, CSV import parsing and column matching |
 | `packages/auth` | Sign-in: Argon2id passwords, authenticator-app codes, recovery codes, sessions, lockout, roles and permissions |
 | `packages/store` | JSON-file data storage: safe writes, locking, validation, SSN/DL encryption, agency isolation, audit log |
-| `packages/rating` | `RatingAdapter` interface, simulated carriers, `rateAll` |
+| `packages/rating` | Quote application schemas (auto, home, dwelling fire), `RatingAdapter` interface, 7 simulated insurers with realistic pricing factors and declines, `rateAll`, pay plans |
 | `prototype/` | Original static click-through prototype |
 
 ## Getting started
@@ -71,6 +71,16 @@ Data is kept as JSON files in `EZLY_DATA_DIR` (`collections/*.json` plus monthly
 SSNs and driver's license numbers can only be saved encrypted. Keep `EZLY_FIELD_KEY`
 in the password manager: without it those fields cannot be read.
 
-Carriers are simulated until real carrier connections are added: each real
-carrier becomes a new `RatingAdapter` in `packages/rating`.
+### Quoting
+- From a client's **Quotes** tab: start an auto, home or dwelling fire application. Drivers come
+  from the household; the property is the client's address. Drafts save at any time; **Get
+  quotes** lists anything missing, then rates every appointed insurer in the state.
+- Results: pay in full / monthly / bank draft, sorting, coverage details, "vs best", and insurers
+  that decline with the reason and **Fix & re-rate** (jumps to the field).
+- **Proposal PDF** (generated on the server) and **Email proposal** through the agency mailbox
+  (`EZLY_SMTP_*` settings); emailing is logged on the client's timeline.
+- **Quotes** in the menu lists recent quote runs across all clients.
+
+Insurers are simulated until real connections are added: each real insurer becomes a new
+`RatingAdapter` in `packages/rating`, and the screens stay the same.
 Never load real customer data into development data folders.

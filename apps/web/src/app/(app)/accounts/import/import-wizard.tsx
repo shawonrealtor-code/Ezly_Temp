@@ -225,7 +225,7 @@ export function ImportWizard() {
             )}
             {preview.unknownProducers.length > 0 && (
               <p className="text-amber-800">
-                These producers aren&apos;t Ezly users, so those clients will be unassigned: {preview.unknownProducers.join(", ")}. Add them under Users first if you want them assigned.
+                These producers or CSRs aren&apos;t Ezly users, so those clients will be unassigned: {preview.unknownProducers.join(", ")}. Add them under Users first if you want them assigned.
               </p>
             )}
 

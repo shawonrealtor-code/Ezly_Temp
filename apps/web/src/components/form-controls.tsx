@@ -20,9 +20,12 @@ function Label({ label, need, htmlFor }: { label: string; need?: Need; htmlFor: 
 }
 
 function Hint({ error, warn, hint }: { error?: string; warn?: boolean; hint?: ReactNode }) {
-  if (error) return <span className="text-xs text-red-600">{error}</span>;
-  if (warn) return <span className="text-xs text-amber-700">Needed to rate</span>;
-  return hint ? <span className="text-xs text-slate-500">{hint}</span> : null;
+  return (
+    <>
+      {error ? <span className="text-xs text-red-600">{error}</span> : warn ? <span className="text-xs text-amber-700">Needed to rate</span> : null}
+      {hint && <span className="text-xs text-slate-500">{hint}</span>}
+    </>
+  );
 }
 
 const border = (error?: string, warn?: boolean) =>

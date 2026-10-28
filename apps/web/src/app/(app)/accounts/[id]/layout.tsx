@@ -13,6 +13,7 @@ export default async function AccountLayout({ children, params }: LayoutProps<"/
   const { id } = await params;
   const { user, data, can } = await requireUser("accounts:read");
   const { account, activities, userName } = await loadAccountPage(data, id);
+  const quoteCount = await data.applications.count((a) => a.accountId === id);
   const agency = await getStore().agencies.get(user.agencyId);
   const name = householdName(account.people);
   const person = primaryPerson(account.people)!;
@@ -92,10 +93,11 @@ export default async function AccountLayout({ children, params }: LayoutProps<"/
             {can("accounts:write") && (
               <div className="flex justify-end gap-2">
                 <ButtonLink href={`/accounts/${id}/activity`} size="sm" icon="note">Log activity</ButtonLink>
+                {can("quotes:run") && <ButtonLink href={`/accounts/${id}/quotes`} size="sm" icon="quotes">Quotes</ButtonLink>}
                 <ButtonLink href={`/accounts/${id}/details`} size="sm" variant="primary" icon="note">Edit details</ButtonLink>
               </div>
             )}
-            <AccountTabs base={`/accounts/${id}`} counts={{ activity: activities.length }} />
+            <AccountTabs base={`/accounts/${id}`} counts={{ activity: activities.length, quotes: quoteCount }} />
           </div>
           {children}
         </div>

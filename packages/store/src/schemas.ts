@@ -159,7 +159,7 @@ export const accountSchema = z.object({
   deletedAt: isoDateTime.optional(),
 });
 
-export const ACTIVITY_KINDS = ["note", "call", "email", "text", "meeting"] as const;
+export const ACTIVITY_KINDS = ["note", "call", "email", "text", "meeting", "quote"] as const;
 
 /** A note or a logged conversation on a client's timeline. */
 export const activitySchema = z.object({
@@ -176,24 +176,39 @@ export const applicationSchema = z.object({
   accountId: z.uuid(),
   lob: z.enum(LOBS),
   status: z.enum(["draft", "valid", "invalid"]).default("draft"),
+  /** The form as entered (draft values); validated against the rating schema when quoting. */
   risk: z.record(z.string(), z.unknown()).default({}),
+  lastRatedAt: isoDateTime.optional(),
 });
 
 export const carrierQuoteSchema = z.object({
   carrierKey: z.string(),
+  carrierName: z.string(),
   status: z.enum(["ok", "error"]),
+  termPremium: z.number().nonnegative().optional(),
+  termMonths: z.union([z.literal(6), z.literal(12)]).optional(),
   annualPremium: z.number().nonnegative().optional(),
-  termMonths: z.number().int().positive().optional(),
+  coverages: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
+  notes: z.array(z.string()).default([]),
   errors: z.array(z.string()).default([]),
+  /** Application fields that would fix an error, for "Fix & re-rate". */
+  fields: z.array(z.string()).default([]),
 });
 
+/** One "Get quotes" run: a snapshot of exactly what was rated and every insurer's answer. */
 export const quoteRunSchema = z.object({
   ...tenant,
   accountId: z.uuid(),
   applicationId: z.uuid(),
-  payPlan: z.enum(["full_pay", "monthly", "eft"]).default("full_pay"),
+  lob: z.enum(LOBS),
+  state: US_STATE,
+  zip: z.string(),
+  /** The validated risk that was sent to insurers. */
+  request: z.record(z.string(), z.unknown()),
+  ratedById: z.uuid(),
   submittedAt: isoDateTime,
   quotes: z.array(carrierQuoteSchema).default([]),
+  emailedAt: isoDateTime.optional(),
 });
 
 export const policySchema = z.object({
@@ -264,6 +279,7 @@ export type Address = z.output<typeof addressSchema>;
 export type Account = z.output<typeof accountSchema>;
 export type Application = z.output<typeof applicationSchema>;
 export type QuoteRun = z.output<typeof quoteRunSchema>;
+export type CarrierQuote = z.output<typeof carrierQuoteSchema>;
 export type Policy = z.output<typeof policySchema>;
 export type Task = z.output<typeof taskSchema>;
 export type AuditEntry = z.output<typeof auditEntrySchema>;

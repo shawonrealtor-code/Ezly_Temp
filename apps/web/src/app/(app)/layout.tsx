@@ -11,7 +11,7 @@ import { signOutAction } from "../(public)/actions";
 const NAV: { href: string; label: string; icon: IconName; permission: Permission }[] = [
   { href: "/", label: "Dashboard", icon: "dashboard", permission: "dashboard:view" },
   { href: "/accounts", label: "Clients", icon: "accounts", permission: "accounts:read" },
-  { href: "/rater", label: "Quote Rater", icon: "quotes", permission: "quotes:run" },
+  { href: "/quotes", label: "Quotes", icon: "quotes", permission: "accounts:read" },
   { href: "/settings/users", label: "Users", icon: "users", permission: "users:manage" },
   { href: "/activity", label: "Activity log", icon: "activity", permission: "audit:read" },
 ];

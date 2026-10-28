@@ -3,18 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function AccountTabs({ base, counts }: { base: string; counts: { activity: number } }) {
+export function AccountTabs({ base, counts }: { base: string; counts: { activity: number; quotes: number } }) {
   const pathname = usePathname();
   const tabs = [
     { href: base, label: "Overview" },
     { href: `${base}/details`, label: "Details" },
+    { href: `${base}/quotes`, label: "Quotes", count: counts.quotes, prefix: true },
     { href: `${base}/lead`, label: "Lead info" },
     { href: `${base}/activity`, label: "Activity", count: counts.activity },
   ];
   return (
     <nav className="flex gap-1 overflow-x-auto border-b border-slate-200" aria-label="Client sections">
       {tabs.map((t) => {
-        const active = pathname === t.href;
+        const active = pathname === t.href || ("prefix" in t && t.prefix && pathname.startsWith(`${t.href}/`));
         return (
           <Link
             key={t.href}

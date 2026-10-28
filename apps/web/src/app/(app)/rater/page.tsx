@@ -1,12 +1,6 @@
-import { requireUser } from "@/lib/auth";
-import { RaterForm } from "./rater-form";
+import { redirect } from "next/navigation";
 
-export default async function RaterPage() {
-  await requireUser("quotes:run");
-  return (
-    <>
-      <h1 className="mb-4 text-xl font-semibold">Quote Rater</h1>
-      <RaterForm />
-    </>
-  );
+// The old quick-quote sandbox moved: quotes are now run from a client's Quotes tab.
+export default function RaterPage() {
+  redirect("/quotes");
 }

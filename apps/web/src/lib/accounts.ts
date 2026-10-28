@@ -304,12 +304,14 @@ export interface ImportPreview {
 
 function importedToInput(account: ImportedAccount, cipher: FieldCipher, producers: Map<string, string>, batchId: string): AccountInput {
   const producerId = account.producer ? producers.get(account.producer.trim().toLowerCase()) : undefined;
+  const csrId = account.csr ? producers.get(account.csr.trim().toLowerCase()) : undefined;
   return {
     importBatchId: batchId,
     leadSource: account.leadSource,
     leadStatus: account.leadStatus ?? "NEW",
     customerSince: account.customerSince,
     producerId,
+    csrId,
     people: account.people.map(({ ssnPlain, dlNumberPlain, ...p }) => ({
       ...p,
       ssn: ssnPlain ? cipher.encrypt(ssnPlain) : undefined,
@@ -343,7 +345,9 @@ async function analyzeImport(data: AgencyStore, rows: string[][], mapping: Mappi
       continue;
     }
     if (row.warnings.length) preview.warnings.push({ line: row.line, messages: row.warnings });
-    if (row.account.producer && !producers.has(row.account.producer.trim().toLowerCase())) unknown.add(row.account.producer);
+    for (const name of [row.account.producer, row.account.csr]) {
+      if (name && !producers.has(name.trim().toLowerCase())) unknown.add(name);
+    }
     const candidate = { ...row.account, emails: row.account.emails, id: `line-${row.line}`, name: householdName(row.account.people), line: row.line };
     const matches = index.find(candidate);
     if (matches.length) {

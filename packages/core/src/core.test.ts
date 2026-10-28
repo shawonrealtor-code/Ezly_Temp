@@ -143,6 +143,11 @@ describe("CSV import", () => {
     expect(ann.warnings[0]).toMatch(/leading zeros/);
   });
 
+  it("recognizes EZLynx-style headers with Applicant/Insured prefixes", () => {
+    const m = guessMapping(["Applicant First Name", "Applicant Last Name", "Insured DOB", "Address Line 1", "Postal Code", "Postal Code Suffix", "Assigned Producer", "CSR", "Co-Applicant First Name", "Mobile Phone"]);
+    expect(m).toEqual({ firstName: 0, lastName: 1, dateOfBirth: 2, line1: 3, zip: 4, zip4: 5, producer: 6, csr: 7, coFirstName: 8, phone: 9 });
+  });
+
   it("rejects rows without a name and splits a single full-name column", () => {
     const { headers, rows } = parseCsv("Name,Phone\n\"Ortega, Maria L\",4105550175\nCher,4105550100");
     const [a, b] = mapRows(rows, guessMapping(headers), today);

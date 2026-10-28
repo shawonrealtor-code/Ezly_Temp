@@ -91,7 +91,7 @@ order; each one lists what it needs from earlier ones.
 
 **Done when:** you can import a test list, find a client, edit them, and see the history.
 
-### Segment 4 — Quoting
+### Segment 4 — Quoting  ✅ *done 2026-10-28*
 
 - Home, Auto and Dwelling Fire application forms (drivers, vehicles, dwelling, coverages).
 - Rate with the simulated insurers; results page with pay plans, sorting, errors and
