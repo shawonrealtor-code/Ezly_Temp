@@ -49,6 +49,9 @@ export interface ClientForm {
   preferredContact: string;
   contactTime: string;
   shareEmailWithCarriers: boolean;
+  /** The client agreed to receive texts from the agency. */
+  textConsent: boolean;
+  textConsentMethod: string;
   producerId: string;
   csrId: string;
   leadSource: string;
@@ -96,6 +99,8 @@ export const emptyClientForm = (defaults: Partial<ClientForm> = {}): ClientForm 
   preferredContact: "",
   contactTime: "",
   shareEmailWithCarriers: false,
+  textConsent: false,
+  textConsentMethod: "",
   producerId: "",
   csrId: "",
   leadSource: "",
@@ -137,6 +142,7 @@ export const OPTIONS = {
   ],
   language: ["English", "Spanish", "Bengali", "Hindi", "Urdu", "Chinese", "Korean", "Vietnamese", "Arabic", "French", "Other"],
   leadSource: ["Referral", "Website", "Walk-in", "Phone call", "Social media", "Carrier lead", "Renewal list", "Other"],
+  textConsentMethod: ["Verbally (phone call)", "In person", "Signed form", "Replied YES to a text", "Website form"],
   phoneKind: [["mobile", "Mobile"], ["home", "Home"], ["work", "Work"], ["other", "Other"]],
   emailKind: [["primary", "Primary"], ["work", "Work"], ["other", "Other"]],
 } as const;

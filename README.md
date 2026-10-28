@@ -12,6 +12,7 @@ rater. See [docs/TECHNICAL_SPEC.md](docs/TECHNICAL_SPEC.md),
 | `packages/core` | Browser-safe client logic: "ready to rate" checklist, search, duplicate detection, CSV import parsing and column matching |
 | `packages/auth` | Sign-in: Argon2id passwords, authenticator-app codes, recovery codes, sessions, lockout, roles and permissions |
 | `packages/store` | JSON-file data storage: safe writes, locking, validation, SSN/DL encryption, agency isolation, audit log |
+| `packages/messaging` | Text messages: provider interface (Twilio, development outbox), consent rules, phone formatting |
 | `packages/rating` | Quote application schemas (auto, home, dwelling fire), `RatingAdapter` interface, 7 simulated insurers with realistic pricing factors and declines, `rateAll`, pay plans |
 | `prototype/` | Original static click-through prototype |
 
@@ -80,6 +81,16 @@ in the password manager: without it those fields cannot be read.
 - **Proposal PDF** (generated on the server) and **Email proposal** through the agency mailbox
   (`EZLY_SMTP_*` settings); emailing is logged on the client's timeline.
 - **Quotes** in the menu lists recent quote runs across all clients.
+
+### Text messages (ready, switched off)
+- Today the text button opens the staff member's own phone (free).
+- Each client's **consent to receive texts** is recorded on the Details tab (when and how; turning
+  it off records an opt-out). This is required by law (TCPA) before an agency texts a client.
+- To switch on texting from Ezly later, set `EZLY_SMS_PROVIDER` and the provider settings in the
+  server environment (see `.env.example`); no code changes. A "Send a text" box then appears on the
+  client's Activity tab, only for clients who agreed, and every text is logged on the timeline.
+  The business number must first be registered for business texting (A2P 10DLC).
+- Not yet: receiving replies and automatic STOP handling (needs a webhook from the provider).
 
 Insurers are simulated until real connections are added: each real insurer becomes a new
 `RatingAdapter` in `packages/rating`, and the screens stay the same.

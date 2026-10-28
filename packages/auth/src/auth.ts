@@ -55,7 +55,7 @@ export const hashToken = (token: string) => createHash("sha256").update(token).d
  * random token whose hash identifies the session, so sessions can be revoked instantly.
  */
 export class AuthService {
-  private readonly policy: AuthPolicy;
+  readonly policy: AuthPolicy;
 
   constructor(
     private readonly store: Store,

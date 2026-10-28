@@ -40,7 +40,7 @@ export const clientFormSchema = z.object({
   previousAddress: addressFormSchema,
   phones: z.array(z.object({ kind: str, number: str, preferred: z.boolean() })).max(5),
   emails: z.array(z.object({ kind: str, address: str, preferred: z.boolean() })).max(5),
-  preferredContact: str, contactTime: str, shareEmailWithCarriers: z.boolean(),
+  preferredContact: str, contactTime: str, shareEmailWithCarriers: z.boolean(), textConsent: z.boolean(), textConsentMethod: str,
   producerId: str, csrId: str, leadSource: str, leadStatus: str, leadPriority: str, probabilityOfSale: str,
   customerSince: str, vip: z.boolean(), labels: z.string().max(1000),
 }) satisfies z.ZodType<ClientForm>;
@@ -161,6 +161,18 @@ export async function formToAccount(
   if (Number.isNaN(probability)) err("probabilityOfSale", "Probability must be 0–100.");
   const leadStatus = ["NEW", "CONTACTED", "QUOTED", "SOLD", "LOST"].includes(form.leadStatus) ? form.leadStatus : "NEW";
 
+  // Text consent: record when it was given or withdrawn (needed to prove consent before texting).
+  const hadConsent = !!ctx.existing?.textConsentAt && !(ctx.existing.textOptOutAt && ctx.existing.textOptOutAt > ctx.existing.textConsentAt);
+  const now = new Date().toISOString();
+  if (form.textConsent && !hadConsent && !form.textConsentMethod) err("textConsentMethod", "Choose how the client agreed to receive texts.");
+  const textConsent = form.textConsent
+    ? hadConsent
+      ? { textConsentAt: ctx.existing!.textConsentAt, textConsentMethod: ctx.existing!.textConsentMethod, textOptOutAt: ctx.existing!.textOptOutAt }
+      : { textConsentAt: now, textConsentMethod: opt(form.textConsentMethod), textOptOutAt: undefined }
+    : hadConsent
+      ? { textConsentAt: ctx.existing!.textConsentAt, textConsentMethod: ctx.existing!.textConsentMethod, textOptOutAt: now }
+      : { textConsentAt: ctx.existing?.textConsentAt, textConsentMethod: ctx.existing?.textConsentMethod, textOptOutAt: ctx.existing?.textOptOutAt };
+
   if (errors.length) return { errors };
   return {
     errors: [],
@@ -173,6 +185,7 @@ export async function formToAccount(
       preferredContact: (["text", "call", "email"].includes(form.preferredContact) ? form.preferredContact : undefined) as AccountInput["preferredContact"],
       contactTime: opt(form.contactTime),
       shareEmailWithCarriers: form.shareEmailWithCarriers,
+      ...textConsent,
       producerId: opt(form.producerId),
       csrId: opt(form.csrId),
       leadSource: opt(form.leadSource),
@@ -208,6 +221,8 @@ export function accountToForm(a: Account): ClientForm {
     preferredContact: a.preferredContact ?? "",
     contactTime: a.contactTime ?? "",
     shareEmailWithCarriers: a.shareEmailWithCarriers,
+    textConsent: !!a.textConsentAt && !(a.textOptOutAt && a.textOptOutAt > a.textConsentAt),
+    textConsentMethod: a.textConsentMethod ?? "",
     producerId: a.producerId ?? "",
     csrId: a.csrId ?? "",
     leadSource: a.leadSource ?? "",

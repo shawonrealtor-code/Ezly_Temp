@@ -4,6 +4,7 @@ import { Avatar, Badge, ButtonLink, LEAD_STATUS, PageHeader, dateFmt, toneFor } 
 import { loadAccountPage } from "@/lib/accounts";
 import { requireUser } from "@/lib/auth";
 import { getStore } from "@/lib/store";
+import { textTarget, textingEnabled } from "@/lib/texting";
 import { AccountTabs } from "./account-tabs";
 
 const external = { target: "_blank", rel: "noopener noreferrer", className: "inline-flex items-center gap-1 text-blue-700 hover:underline" } as const;
@@ -22,6 +23,7 @@ export default async function AccountLayout({ children, params }: LayoutProps<"/
   const email = account.emails.find((e) => e.preferred) ?? account.emails[0];
   const status = LEAD_STATUS[account.leadStatus];
   const textBody = `Hi ${person.firstName}, this is ${user.name.split(" ")[0]} from ${agency?.name ?? "your insurance agency"}.`;
+  const canTextFromEzly = textingEnabled() && can("accounts:write") && "to" in textTarget(account);
   const addressLine = address ? `${address.line1}, ${address.city}, ${address.state} ${address.zip}` : "";
 
   return (
@@ -40,7 +42,11 @@ export default async function AccountLayout({ children, params }: LayoutProps<"/
               {phone && (
                 <>
                   <a href={`tel:${digits(phone.number)}`} title="Call" aria-label="Call" className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Icon name="phone" /></a>
-                  <a href={`sms:${digits(phone.number)}?&body=${encodeURIComponent(textBody)}`} title="Text from my phone" aria-label="Text from my phone" className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Icon name="message" /></a>
+                  {canTextFromEzly ? (
+                    <a href={`/accounts/${id}/activity#text`} title="Send a text from Ezly" aria-label="Send a text from Ezly" className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Icon name="message" /></a>
+                  ) : (
+                    <a href={`sms:${digits(phone.number)}?&body=${encodeURIComponent(textBody)}`} title="Text from my phone" aria-label="Text from my phone" className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Icon name="message" /></a>
+                  )}
                 </>
               )}
               {email && <a href={`mailto:${email.address}`} title="Email" aria-label="Email" className="grid h-9 w-9 place-items-center rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50"><Icon name="mail" /></a>}

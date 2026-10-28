@@ -12,10 +12,11 @@
   "dependencies": {
     "@ezly/auth": "workspace:*",
     "@ezly/core": "workspace:*",
+    "@ezly/messaging": "workspace:*",
     "@ezly/rating": "workspace:*",
     "@ezly/store": "workspace:*",
     "next": "16.4.2",
-    "nodemailer": "10.1.0",
+    "nodemailer": "10.1.7",
     "pdf-lib": "1.17.1",
     "qrcode": "1.5.4",
     "react": "19.3.0",

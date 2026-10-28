@@ -3,7 +3,9 @@ import { Icon, type IconName } from "@/components/icons";
 import { Card, CardHeader, EmptyState, dateFmt } from "@/components/ui";
 import { loadAccountPage } from "@/lib/accounts";
 import { requireUser } from "@/lib/auth";
+import { textTarget, textingEnabled } from "@/lib/texting";
 import { ActivityForm } from "./activity-form";
+import { TextComposer } from "./text-composer";
 
 const KIND_ICON: Record<Activity["kind"], IconName> = { note: "note", call: "phone", email: "mail", text: "message", meeting: "accounts", quote: "quotes" };
 const FIELD_LABELS: Record<string, string> = {
@@ -46,6 +48,10 @@ export default async function ActivityTab({ params }: PageProps<"/accounts/[id]/
 
   return (
     <>
+      {can("accounts:write") && textingEnabled() && (() => {
+        const t = textTarget(account);
+        return <TextComposer accountId={id} target={"to" in t ? t.display : undefined} blocked={"reason" in t ? t.reason : undefined} />;
+      })()}
       {can("accounts:write") && <ActivityForm accountId={id} />}
       <Card>
         <CardHeader title="Timeline" icon="activity" />

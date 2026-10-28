@@ -148,6 +148,12 @@ export const accountSchema = z.object({
   probabilityOfSale: z.number().int().min(0).max(100).optional(),
   preferredContact: z.enum(["text", "call", "email"]).optional(),
   contactTime: optionalText,
+  /** When the client agreed to receive texts from the agency (required by law before texting them). */
+  textConsentAt: isoDateTime.optional(),
+  /** How consent was given, e.g. "Verbally (call)" or "Signed form". */
+  textConsentMethod: optionalText,
+  /** When the client withdrew consent (e.g. replied STOP). */
+  textOptOutAt: isoDateTime.optional(),
   /** Whether the client's email may be sent to carriers when rating. */
   shareEmailWithCarriers: z.boolean().default(false),
   /** Set on clients created by a CSV import, so the import can be undone. */

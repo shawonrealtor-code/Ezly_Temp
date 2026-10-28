@@ -138,6 +138,9 @@ successfully in a test.
 
 ### Later (when real insurers are ready)
 
+- Texting from Ezly: built and switched off (see README "Text messages"). Turn on by adding a
+  texting provider's settings; then add incoming replies and automatic STOP handling.
+
 - Connect real insurers one at a time through the existing rating interface.
 - Move from JSON to SQLite/PostgreSQL if size or speed requires it.
 

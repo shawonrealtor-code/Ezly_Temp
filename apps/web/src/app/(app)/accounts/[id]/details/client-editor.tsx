@@ -12,11 +12,13 @@ export function ClientEditor({
   accountId, initial, mode, staff, canEdit, canReveal,
 }: { accountId: string; initial: ClientForm; mode: "details" | "lead"; staff: StaffOptions; canEdit: boolean; canReveal: boolean }) {
   const [form, setForm] = useState(initial);
+  // What's saved; "unsaved changes" compares against this.
+  const [baseline, setBaseline] = useState(initial);
   const [errors, setErrors] = useState<FieldError[]>([]);
   const [saved, setSaved] = useState(false);
   const [revealed, setRevealed] = useState<{ label: string; value: string } | null>(null);
   const [pending, startTransition] = useTransition();
-  const dirty = JSON.stringify(form) !== JSON.stringify(initial);
+  const dirty = JSON.stringify(form) !== JSON.stringify(baseline);
 
   const set = (update: (draft: ClientForm) => ClientForm) => {
     setSaved(false);
@@ -28,9 +30,10 @@ export function ClientEditor({
       const result = mode === "details" ? await updateAccountAction(accountId, form) : await updateLeadAction(accountId, form);
       setErrors(result?.errors ?? []);
       if (result?.saved) {
+        // The saved version never contains typed SSN / license numbers, so they don't linger in the page.
+        setBaseline(result.saved);
+        setForm(result.saved);
         setSaved(true);
-        // Clear typed SSN / license numbers: they're saved (encrypted) and shouldn't linger in the page.
-        setForm((f) => ({ ...f, people: f.people.map((p) => ({ ...p, ssn: "", dlNumber: "" })) }));
       }
     });
 
@@ -77,7 +80,7 @@ export function ClientEditor({
             <button type="button" className={buttonClass("primary")} disabled={!dirty || pending} onClick={save}>
               {pending ? "Saving…" : "Save changes"}
             </button>
-            {dirty && <button type="button" className={buttonClass("ghost")} onClick={() => { setForm(initial); setErrors([]); }}>Discard changes</button>}
+            {dirty && <button type="button" className={buttonClass("ghost")} onClick={() => { setForm(baseline); setErrors([]); }}>Discard changes</button>}
             {saved && !dirty && <span role="status" className="text-sm text-emerald-700">Saved.</span>}
             {!canEdit && <span className="text-sm text-slate-500">Read-only access</span>}
           </div>

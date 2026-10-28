@@ -11,8 +11,12 @@ export function getStore(): Store {
     if (!fieldKey) {
       throw new Error("EZLY_FIELD_KEY is not set. Generate one with `pnpm --filter @ezly/store keygen`.");
     }
+    const dataDir = process.env.EZLY_DATA_DIR;
+    if (!dataDir && process.env.NODE_ENV === "production") {
+      throw new Error("EZLY_DATA_DIR is not set. In production it must point to a private folder outside the public web folder.");
+    }
     store = createStore({
-      dataDir: process.env.EZLY_DATA_DIR ?? resolve(process.cwd(), "../../.data"),
+      dataDir: dataDir ?? resolve(process.cwd(), "../../.data"),
       fieldKeys: [fieldKey, ...(process.env.EZLY_FIELD_KEY_PREVIOUS?.split(",").filter(Boolean) ?? [])],
     });
   }

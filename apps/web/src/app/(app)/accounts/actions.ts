@@ -6,6 +6,7 @@ import { z } from "zod";
 import { IMPORT_FIELDS, MAX_IMPORT_ROWS, type Mapping } from "@ezly/core";
 import { ACTIVITY_KINDS, StoreError } from "@ezly/store";
 import {
+  accountToForm,
   clientFormSchema,
   commitImport,
   findDuplicates,
@@ -19,6 +20,7 @@ import {
 import { getRequestMeta, requireUser } from "@/lib/auth";
 import type { ClientForm } from "@/lib/client-form";
 import { getStore } from "@/lib/store";
+import { sendClientText } from "@/lib/texting";
 
 export type SaveResult = { errors?: FieldError[]; duplicates?: DuplicateMatch[] } | undefined;
 
@@ -47,7 +49,7 @@ export async function createAccountAction(form: ClientForm, allowDuplicate: bool
   redirect(`/accounts/${id}`);
 }
 
-export async function updateAccountAction(accountId: string, form: ClientForm): Promise<SaveResult & { saved?: boolean }> {
+export async function updateAccountAction(accountId: string, form: ClientForm): Promise<SaveResult & { saved?: ClientForm }> {
   const { data } = await requireUser("accounts:write");
   const existing = await data.accounts.get(accountId);
   if (!existing || existing.deletedAt) return { errors: [{ field: "", message: "This client no longer exists." }] };
@@ -68,16 +70,18 @@ export async function updateAccountAction(accountId: string, form: ClientForm): 
   };
   const result = await formToAccount(merged, { data, cipher: getStore().cipher, existing });
   if (result.errors.length) return { errors: result.errors };
+  let updated;
   try {
-    await data.accounts.update(accountId, result.input!);
+    updated = await data.accounts.update(accountId, result.input!);
   } catch (err) {
     return { errors: storeErrors(err) };
   }
   revalidatePath(`/accounts/${accountId}`, "layout");
-  return { saved: true };
+  // Return the saved, cleaned-up version so the form shows exactly what is stored.
+  return { saved: accountToForm(updated) };
 }
 
-export async function updateLeadAction(accountId: string, form: ClientForm): Promise<SaveResult & { saved?: boolean }> {
+export async function updateLeadAction(accountId: string, form: ClientForm): Promise<SaveResult & { saved?: ClientForm }> {
   const { data } = await requireUser("accounts:write");
   const existing = await data.accounts.get(accountId);
   if (!existing || existing.deletedAt) return { errors: [{ field: "", message: "This client no longer exists." }] };
@@ -86,9 +90,9 @@ export async function updateLeadAction(accountId: string, form: ClientForm): Pro
   const result = await formToAccount(parsed.data, { data, cipher: getStore().cipher, existing });
   if (result.errors.length) return { errors: result.errors };
   const { producerId, csrId, leadSource, leadStatus, leadPriority, probabilityOfSale, customerSince, vip, labels } = result.input!;
-  await data.accounts.update(accountId, { producerId, csrId, leadSource, leadStatus, leadPriority, probabilityOfSale, customerSince, vip, labels });
+  const updated = await data.accounts.update(accountId, { producerId, csrId, leadSource, leadStatus, leadPriority, probabilityOfSale, customerSince, vip, labels });
   revalidatePath(`/accounts/${accountId}`, "layout");
-  return { saved: true };
+  return { saved: accountToForm(updated) };
 }
 
 const activityInput = z.object({
@@ -155,4 +159,15 @@ export async function undoImportAction(batchId: string) {
   await data.logEvent("data.import_undone", `Undid import ${batchId}: removed ${result.removed}, kept ${result.kept} changed since`, undefined, await getRequestMeta());
   revalidatePath("/accounts");
   return { result };
+}
+
+/** Sends a text to the client through the configured texting provider (off until set up). */
+export async function sendTextAction(accountId: string, _prev: { error?: string; ok?: number } | null, form: FormData) {
+  const { user, data } = await requireUser("accounts:write");
+  const account = await data.accounts.get(accountId);
+  if (!account || account.deletedAt) return { error: "This client no longer exists." };
+  const result = await sendClientText(data, user, account, String(form.get("body") ?? ""));
+  if ("error" in result) return { error: result.error };
+  revalidatePath(`/accounts/${accountId}`, "layout");
+  return { ok: Date.now() };
 }

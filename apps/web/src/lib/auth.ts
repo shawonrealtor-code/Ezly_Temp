@@ -51,7 +51,8 @@ export function takeRecoveryCodes(userId: string): string[] | null {
 }
 
 export async function setSessionCookie(token: string, fullSession: boolean) {
-  const seconds = fullSession ? DEFAULT_POLICY.maxHours * 3600 : DEFAULT_POLICY.pendingMinutes * 60;
+  const { maxHours, pendingMinutes } = getAuth().policy;
+  const seconds = fullSession ? maxHours * 3600 : pendingMinutes * 60;
   (await cookies()).set(SESSION_COOKIE, token, sessionCookieOptions(seconds));
 }
 

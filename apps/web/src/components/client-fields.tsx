@@ -188,6 +188,15 @@ export function ContactSection(props: SectionProps) {
           <TextField id="contactTime" label="Best time to reach" placeholder="e.g. weekday evenings" value={form.contactTime} onValue={(contactTime) => set((f) => ({ ...f, contactTime }))} />
           <Toggle id="shareEmailWithCarriers" label="Share email with carriers when rating" checked={form.shareEmailWithCarriers} onValue={(shareEmailWithCarriers) => set((f) => ({ ...f, shareEmailWithCarriers }))} />
         </div>
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <div className="flex flex-col gap-1.5">
+            <Toggle id="textConsent" label="Client agreed to receive texts from the agency" checked={form.textConsent} onValue={(textConsent) => set((f) => ({ ...f, textConsent }))} />
+            <span className="text-xs text-slate-500">Required by law before the agency texts a client. Turning it off records that they opted out.</span>
+          </div>
+          {form.textConsent && (
+            <SelectField id="textConsentMethod" label="How they agreed" value={form.textConsentMethod} error={errorFor(errors, "textConsentMethod")} options={OPTIONS.textConsentMethod} onValue={(textConsentMethod) => set((f) => ({ ...f, textConsentMethod }))} />
+          )}
+        </div>
       </FormSection>
     </>
   );

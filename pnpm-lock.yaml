@@ -16,6 +16,9 @@ importers:
       '@ezly/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@ezly/messaging':
+        specifier: workspace:*
+        version: link:../../packages/messaging
       '@ezly/rating':
         specifier: workspace:*
         version: link:../../packages/rating
@@ -26,8 +29,8 @@ importers:
         specifier: 16.4.2
         version: 16.4.2(@babel/core@7.29.7)(@types/node@20.19.43)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       nodemailer:
-        specifier: 10.1.0
-        version: 10.1.0
+        specifier: 10.1.7
+        version: 10.1.7
       pdf-lib:
         specifier: 1.17.1
         version: 1.17.1
@@ -121,6 +124,18 @@ importers:
       '@types/papaparse':
         specifier: 5.5.2
         version: 5.5.2
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+      vitest:
+        specifier: ^5.0.5
+        version: 5.0.5(@types/node@22.20.5)(vite@8.3.5(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15))
+
+  packages/messaging:
+    devDependencies:
+      '@types/node':
+        specifier: ^22
+        version: 22.20.5
       typescript:
         specifier: ^5
         version: 5.9.3
@@ -2215,8 +2230,8 @@ packages:
     resolution: {integrity: sha512-5qr2okC4ItAI0hG5SaV0HoYMpnM/Y6+Oqr7AmPYy/2uEoGvS+GbSKLeRxSS1uAdu59yz0ouzcuXievSgg///WA==}
     engines: {node: '>=18'}
 
-  nodemailer@10.1.0:
-    resolution: {integrity: sha512-fXW8AulB25aOTuwfRYV6lqHyfz2VM4rr4SGXH03mE7x5znEUpzL5mu6anARUpZN7744Ziwkmr4AxSLPJsBQspg==}
+  nodemailer@10.1.7:
+    resolution: {integrity: sha512-OQa6FDln5fLttmqSbjDiRYvFDOFNrBqfiOwHPlEbURil3b+vPB1v8xpi+Sp46drzNDlsTnNsS502vthmz56r4w==}
     engines: {node: '>=20.0.0'}
 
   object-assign@4.1.1:
@@ -4799,7 +4814,7 @@ snapshots:
 
   node-releases@2.0.59: {}
 
-  nodemailer@10.1.0: {}
+  nodemailer@10.1.7: {}
 
   object-assign@4.1.1: {}
 
