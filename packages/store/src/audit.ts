@@ -85,7 +85,7 @@ export class AuditLog {
 }
 
 const IGNORED = new Set(["updatedAt"]);
-const SECRET_KEYS = new Set(["passwordHash", "recoveryCodeHashes", "tokenHash"]);
+const SECRET_KEYS = new Set(["passwordHash", "recoveryCodeHashes", "tokenHash", "mailboxPassword"]);
 
 function diff(before: StoredRecord, after: StoredRecord): Record<string, unknown> {
   const changes: Record<string, unknown> = {};

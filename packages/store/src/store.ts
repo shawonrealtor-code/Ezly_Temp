@@ -8,6 +8,7 @@ import {
   accountSchema,
   activitySchema,
   agencySchema,
+  emailLogSchema,
   applicationSchema,
   carrierSchema,
   policySchema,
@@ -94,6 +95,8 @@ export function createStore({ dataDir, fieldKeys }: StoreOptions) {
     quoteRuns: make("quoteRuns", quoteRunSchema),
     policies: make("policies", policySchema),
     tasks: make("tasks", taskSchema),
+    // Not audited as record changes: the log is itself the record.
+    emailLog: new Collection("emailLog", collectionsDir, emailLogSchema),
   };
 
   return {
@@ -125,6 +128,7 @@ export function createStore({ dataDir, fieldKeys }: StoreOptions) {
         quoteRuns: scope(tenantCollections.quoteRuns),
         policies: scope(tenantCollections.policies),
         tasks: scope(tenantCollections.tasks),
+        emailLog: scope(tenantCollections.emailLog),
         auditTrail: (recordId?: string, limit?: number) => audit.list({ agencyId, recordId, limit }),
         /** Logs a security-relevant action by this user (e.g. revealing an SSN, exporting data). */
         logEvent: (action: AuthAction, detail: string, recordId?: string, meta: { ip?: string; userAgent?: string } = {}) =>

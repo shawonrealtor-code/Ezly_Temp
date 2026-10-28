@@ -33,6 +33,8 @@ export const agencySchema = z.object({
   ...base,
   name: z.string().trim().min(1),
   states: z.array(US_STATE).default([]),
+  /** The company's email domain (e.g. "sahaagency.com"). Ezly only sends from addresses on it. */
+  emailDomain: z.string().trim().toLowerCase().regex(/^[a-z0-9-]+(\.[a-z0-9-]+)+$/, "Enter a domain like sahaagency.com").optional(),
 });
 
 export const userSchema = z.object({
@@ -54,6 +56,10 @@ export const userSchema = z.object({
   lastTotpStep: z.number().int().optional(),
   /** SHA-256 hashes of unused one-time recovery codes. */
   recoveryCodeHashes: z.array(z.string()).default([]),
+  /** Company mailbox this person sends from, connected by an admin. */
+  mailboxAddress: z.email().transform((e) => e.toLowerCase()).optional(),
+  mailboxPassword: encrypted.optional(),
+  mailboxVerifiedAt: isoDateTime.optional(),
   /** Bumped to sign the user out everywhere (password change, role change, deactivation). */
   sessionVersion: z.number().int().min(0).default(0),
 });
@@ -163,6 +169,18 @@ export const accountSchema = z.object({
   phones: z.array(phoneSchema).default([]),
   emails: z.array(emailSchema).default([]),
   deletedAt: isoDateTime.optional(),
+});
+
+/** Every email Ezly sends, for the record and to stay under each mailbox's daily sending limit. */
+export const emailLogSchema = z.object({
+  ...tenant,
+  from: z.email(),
+  to: z.array(z.email()).min(1),
+  subject: z.string().max(300),
+  kind: z.enum(["proposal", "reminder", "notice", "other"]),
+  sentById: z.uuid().optional(),
+  accountId: z.uuid().optional(),
+  sentAt: isoDateTime,
 });
 
 export const ACTIVITY_KINDS = ["note", "call", "email", "text", "meeting", "quote"] as const;
@@ -291,6 +309,7 @@ export type Task = z.output<typeof taskSchema>;
 export type AuditEntry = z.output<typeof auditEntrySchema>;
 export type Session = z.output<typeof sessionSchema>;
 export type Activity = z.output<typeof activitySchema>;
+export type EmailLog = z.output<typeof emailLogSchema>;
 
 export type AgencyInput = Omit<z.input<typeof agencySchema>, "id" | "createdAt" | "updatedAt">;
 export type UserInput = Input<typeof userSchema>;

@@ -26,6 +26,7 @@ export function ResultsView(props: {
   canRate: boolean;
   clientEmail: string;
   emailReady: boolean;
+  sendFrom: string;
   emailedAt?: string;
 }) {
   const [plan, setPlan] = useState<PayPlan>("full_pay");
@@ -178,7 +179,7 @@ export function ResultsView(props: {
   );
 }
 
-function EmailPanel(props: { accountId: string; appId: string; runId: string; clientEmail: string; emailReady: boolean; onClose: () => void }) {
+function EmailPanel(props: { accountId: string; appId: string; runId: string; clientEmail: string; emailReady: boolean; sendFrom: string; onClose: () => void }) {
   const [state, setState] = useState<{ ok?: string; error?: string } | null>(null);
   const [pending, start] = useTransition();
   return (
@@ -192,6 +193,7 @@ function EmailPanel(props: { accountId: string; appId: string; runId: string; cl
         }}
       >
         <h3 className="font-semibold">Email the proposal (PDF attached)</h3>
+        {props.emailReady && props.sendFrom && <p className="text-slate-600">Sends from <b>{props.sendFrom}</b>.</p>}
         {!props.emailReady && (
           <p className="rounded bg-amber-50 p-2 text-amber-800">
             Email sending isn&apos;t set up on this server yet. Download the PDF and attach it in your own email for now.

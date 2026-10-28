@@ -1,13 +1,13 @@
 import { primaryAddress } from "@ezly/core";
 import { requireUser } from "@/lib/auth";
-import { mailConfigured } from "@/lib/mail";
+import { mailConfigured, senderAddressFor } from "@/lib/mail";
 import { LOB_TITLES } from "@/lib/quote-forms";
 import { loadRun, riskSummary } from "@/lib/quotes";
 import { ResultsView } from "./results-view";
 
 export default async function ResultsPage({ params }: PageProps<"/accounts/[id]/quotes/[appId]/results/[runId]">) {
   const { id, appId, runId } = await params;
-  const { data, can } = await requireUser("accounts:read");
+  const { user, data, can } = await requireUser("accounts:read");
   const { account, run } = await loadRun(data, id, appId, runId);
   const [ratedBy, latest] = await Promise.all([
     data.users.get(run.ratedById),
@@ -29,6 +29,7 @@ export default async function ResultsPage({ params }: PageProps<"/accounts/[id]/
       canRate={can("quotes:run")}
       clientEmail={account.emails.find((e) => e.preferred)?.address ?? account.emails[0]?.address ?? ""}
       emailReady={mailConfigured()}
+      sendFrom={senderAddressFor(user) ?? ""}
       emailedAt={run.emailedAt}
     />
   );

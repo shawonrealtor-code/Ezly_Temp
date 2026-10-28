@@ -1,8 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import { ROLES, StoreError, type User } from "@ezly/store";
 import { getAuth, getRequestMeta, requireUser } from "@/lib/auth";
+import { domainOf, verifyMailbox } from "@/lib/mail";
+import { getStore } from "@/lib/store";
 
 export type UserFormState = { ok?: string; problems?: string[] } | null;
 
@@ -57,6 +60,27 @@ export async function userRowAction(_prev: UserFormState, form: FormData): Promi
       case "unlock":
         await auth.unlock(admin.agencyId, admin.id, userId, meta);
         break;
+      case "connect-mailbox": {
+        const agency = await getStore().agencies.get(admin.agencyId);
+        if (!agency?.emailDomain) return { problems: ["Set the company email domain first (top of this page)."] };
+        const address = String(form.get("mailboxAddress") ?? "").trim().toLowerCase();
+        const password = String(form.get("mailboxPassword") ?? "");
+        if (!z.email().safeParse(address).success) return { problems: ["Enter the company email address."] };
+        if (domainOf(address) !== agency.emailDomain) return { problems: [`Use a company address ending in @${agency.emailDomain}.`] };
+        if (!password) return { problems: ["Enter the mailbox password."] };
+        const check = await verifyMailbox(address, password);
+        if ("error" in check) return { problems: [check.error] };
+        await getStore().forAgency(admin.agencyId, admin.id).users.update(userId, {
+          mailboxAddress: address,
+          mailboxPassword: getStore().cipher.encrypt(password),
+          mailboxVerifiedAt: new Date().toISOString(),
+        });
+        revalidatePath("/settings/users");
+        return { ok: `Connected ${address}. Emails this person sends from Ezly now come from it.` };
+      }
+      case "disconnect-mailbox":
+        await getStore().forAgency(admin.agencyId, admin.id).users.update(userId, { mailboxAddress: undefined, mailboxPassword: undefined, mailboxVerifiedAt: undefined });
+        break;
       case "reset-password": {
         const result = await auth.resetPassword(admin.agencyId, admin.id, userId, String(form.get("temporaryPassword") ?? ""));
         if (!result.ok) return { problems: result.problems };
@@ -70,4 +94,17 @@ export async function userRowAction(_prev: UserFormState, form: FormData): Promi
   }
   revalidatePath("/settings/users");
   return { ok: "Saved." };
+}
+
+export async function setEmailDomainAction(_prev: UserFormState, form: FormData): Promise<UserFormState> {
+  const { user: admin } = await requireUser("users:manage");
+  const domain = String(form.get("emailDomain") ?? "").trim().toLowerCase().replace(/^@/, "");
+  try {
+    await getStore().agencies.update(admin.agencyId, { emailDomain: domain || undefined }, { actorId: admin.id });
+  } catch (err) {
+    if (err instanceof StoreError) return { problems: ["Enter a domain like sahaagency.com."] };
+    throw err;
+  }
+  revalidatePath("/settings/users");
+  return { ok: domain ? `Company email domain set to ${domain}.` : "Company email domain cleared." };
 }

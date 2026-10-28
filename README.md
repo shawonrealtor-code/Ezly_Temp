@@ -78,8 +78,19 @@ in the password manager: without it those fields cannot be read.
   quotes** lists anything missing, then rates every appointed insurer in the state.
 - Results: pay in full / monthly / bank draft, sorting, coverage details, "vs best", and insurers
   that decline with the reason and **Fix & re-rate** (jumps to the field).
-- **Proposal PDF** (generated on the server) and **Email proposal** through the agency mailbox
-  (`EZLY_SMTP_*` settings); emailing is logged on the client's timeline.
+- **Proposal PDF** (generated on the server) and **Email proposal**; emailing is logged on the
+  client's timeline.
+
+### Company email
+- Ezly sends only from **company mailboxes** on the company's domain (set by an admin on **Users**).
+- Each employee's company mailbox is created in Hostinger and connected by an admin on **Users**
+  (Ezly signs in to test it; the password is stored encrypted). Their proposals come from their
+  company address, with a copy to that mailbox.
+- Automatic emails, and staff without a connected mailbox, use the **shared company mailbox**
+  (`EZLY_SMTP_*` / `EZLY_MAIL_FROM`); replies go to the employee.
+- Every email is logged, and each mailbox is kept under `EZLY_MAIL_DAILY_LIMIT` per 24 hours;
+  when an employee's mailbox is full Ezly uses the shared one, and stops with a clear message when
+  that is full too.
 - **Quotes** in the menu lists recent quote runs across all clients.
 
 ### Text messages (ready, switched off)
