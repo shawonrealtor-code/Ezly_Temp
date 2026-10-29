@@ -128,6 +128,30 @@ order; each one lists what it needs from earlier ones.
 **Done when:** the owner can run reports, manage staff, and a backup has been restored
 successfully in a test.
 
+### Segment 7B — Client portal  *(needs the owner's decisions: docs/OWNER_QUESTIONS.md)*
+
+Equivalent to EZLynx Client Center. Details in `docs/CLIENT_PORTAL.md`.
+
+- Separate client sign-in (by invitation or automatic); clients see only their own household.
+- My policies, ID cards and documents staff mark as visible; client document uploads.
+- Guided change requests (vehicles, drivers, address, lienholder, cancellation), contact updates
+  for staff approval, new quote requests: each becomes a task for the assigned staff member and
+  appears on the client's timeline, with email notices.
+- Links to insurers' payment pages; agency branding; phone-friendly; every client action logged.
+
+**Done when:** an invited client can sign in, see their policies and ID cards, and send a change
+request that shows up as a task for staff.
+
+### Segment 7C — Website quote form  *(owner decides)*
+
+Equivalent to EZLynx Consumer Quoting (non-live first).
+
+- "Get a quote" form for the agency website or a shareable link; creates a client and lead in
+  Saha Desk, assigned to a producer, with an email alert. Spam protection and contact consent.
+- Live online prices come later, with real insurer connections.
+
+**Done when:** a visitor can submit the form and the lead appears in Saha Desk with an alert.
+
 ### Segment 8 — Go-live with real data
 
 - Security review against the go-live checklist (adapted for Hostinger).
@@ -153,4 +177,5 @@ successfully in a test.
 | Segment 0 | Which Hostinger plan you have, and access to set up the subdomain and deployment (you do the login; credentials are never shared in chat or git) |
 | Segment 3 | A sample client export from EZLynx (with fake or removed SSNs) to design the import |
 | Segment 4 | The insurers you're appointed with, the states you write, and which coverages your producers quote most |
+| Segment 7B / 7C | Answers to `docs/OWNER_QUESTIONS.md` (client portal and website quote form) |
 | Segment 8 | Owner sign-off and the full client export |
