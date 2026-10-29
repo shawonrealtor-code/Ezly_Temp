@@ -9,6 +9,15 @@ Hi,
 We're building **Saha Desk**, our own system to replace EZLynx for managing clients and quoting.
 Before we build the next parts, I need your decisions on a few things. Short answers are fine.
 
+**What I found online about us (please correct anything wrong)**
+
+- Website: sahaagency.com · Phone 703-627-0444 · Fax 888-859-8379
+- Our website lists the office as 14484 General Washington Dr, Woodbridge, VA 22193.
+  Liberty Mutual's agent finder lists us at 6800 Backlick Rd Ste 301, Springfield, VA 22150.
+- Our website says we serve VA, MD, DC, WV, DE, NC and FL, since 2002.
+- Yelp says we work with about 20 insurance companies (home and auto).
+- Facebook page: "Saha Agency & Brokerage".
+
 **A. Client portal (like EZLynx "Client Center")**
 
 EZLynx sells a portal where clients log in to see their policies, download ID cards and documents,
@@ -55,14 +64,29 @@ and request changes. We can build the same thing in Saha Desk at no extra cost.
 
 **C. General**
 
-22. What is our company website and email domain (for example `sahaagency.com`)? Is it hosted at
-    Hostinger?
-23. Which insurance companies are we appointed with, and in which states do we write?
-24. Which coverages do our producers quote most (auto limits, home deductibles, etc.)?
-25. How many clients do we have in EZLynx today, roughly?
-26. Can you send a client export from EZLynx (CSV) with SSNs and driver's license numbers
+22. Is our staff email on `@sahaagency.com`? Who manages the website, and is it hosted at
+    Hostinger (or somewhere else, like GoDaddy or Wix)? Can we add pages or a form to it?
+23. Which office address is current, Woodbridge or Springfield (or both)? Which one should
+    clients see in Saha Desk, on proposals and emails?
+24. Do we actively write in all of VA, MD, DC, WV, DE, NC and FL today, or only some of them?
+25. Which insurance companies are we appointed with (about 20?), and in which states for each?
+26. What are our office hours (to show clients in the portal and in emails)?
+27. Does our website have a chat assistant that answers clients? (I saw an automatic answer
+    saying "Saha Agency does not provide physical insurance books" and giving our phone number.)
+    If so, who set it up, and should Saha Desk connect to it?
+28. Which coverages do our producers quote most (auto limits, home deductibles, etc.)?
+29. How many clients do we have in EZLynx today, roughly?
+30. Can you send a client export from EZLynx (CSV) with SSNs and driver's license numbers
     removed, so we can test moving our clients over?
-27. Who should be the admins in Saha Desk, and who are the producers, CSRs and read-only users?
-28. Is there anything in EZLynx you use every day that you want to make sure Saha Desk has?
+31. Who should be the admins in Saha Desk, and who are the producers, CSRs and read-only users?
+32. Is there anything in EZLynx you use every day that you want to make sure Saha Desk has?
 
 Thank you!
+
+---
+
+Sources for the "found online" facts (for our records, not for the owner message):
+- Saha Agency website: https://sahaagency.com/ and https://www.sahaagency.com/contact-us.html
+- Liberty Mutual agent finder: https://agents.libertymutual.com/find-an-agent/state/virginia/springfield/saha-agency-llc_1802241570
+- Yelp: https://www.yelp.com/biz/saha-agency-woodbridge-4
+- Facebook: https://www.facebook.com/ssahafarmers
