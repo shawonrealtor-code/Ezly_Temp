@@ -89,6 +89,13 @@ Depends on Segment 5 (policies) and Segment 6 (documents).
 
 See `docs/OWNER_QUESTIONS.md`. Building starts after the answers, and after Segments 5–6.
 
+Already settled (not asked of the owner, who prefers business questions only):
+
+- sahaagency.com is run by us on the same Hostinger account, so the website quote form and the
+  portal address can be added there by us.
+- Portal address: `portal.sahaagency.com`. Sign-in: emailed one-time link plus a code, locked after
+  repeated failures. We can change these later if the owner asks.
+
 ## Sources
 
 - EZLynx — Customer Self-Service Portal for Insurance Agencies: https://www.ezlynx.com/products/customer-self-service/

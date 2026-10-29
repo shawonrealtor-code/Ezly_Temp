@@ -1,92 +1,72 @@
 # Questions for the owner — Saha Desk
 
-Copy everything below the line and send it to the owner.
+Copy everything between the lines and send it to the owner.
 
 ---
 
 Hi,
 
-We're building **Saha Desk**, our own system to replace EZLynx for managing clients and quoting.
-Before we build the next parts, I need your decisions on a few things. Short answers are fine.
+We're building **Saha Desk**, our own system for managing clients, quotes and policies. Before we
+build the next parts, I need your decisions on a few things. Short answers are fine.
 
-**What I found online about us (please correct anything wrong)**
+**What I have about the agency (please correct anything wrong)**
 
-- Website: sahaagency.com · Phone 703-627-0444 · Fax 888-859-8379
-- Our website lists the office as 14484 General Washington Dr, Woodbridge, VA 22193.
-  Liberty Mutual's agent finder lists us at 6800 Backlick Rd Ste 301, Springfield, VA 22150.
-- Our website says we serve VA, MD, DC, WV, DE, NC and FL, since 2002.
-- Yelp says we work with about 20 insurance companies (home and auto).
-- Facebook page: "Saha Agency & Brokerage".
+- Saha Agency LLC · sahaagency.com · Phone 703-627-0444 · Fax 888-859-8379
+- Office: 14484 General Washington Dr, Woodbridge, VA 22193 (I also saw 6800 Backlick Rd Ste 301,
+  Springfield, VA 22150 listed online)
+- States: VA, MD, DC, WV, DE, NC and FL, serving clients since 2002
+- About 20 insurance companies, mostly home and auto
 
-**A. Client portal (like EZLynx "Client Center")**
-
-EZLynx sells a portal where clients log in to see their policies, download ID cards and documents,
-and request changes. We can build the same thing in Saha Desk at no extra cost.
+**A. Client portal (a page on our website where clients sign in)**
 
 1. Do you want a client portal? (Yes / No / Later)
-2. If yes, which policies should clients see? Only active ones, or also past/cancelled policies
-   and pending quotes?
-3. Which policy details should they see: insurer, policy number, dates, coverages and
-   deductibles, premium? Anything we should hide?
-4. In a household (for example a married couple), can both people see all the family's policies,
-   or only the policies in their own name?
-5. Which documents can clients download: ID cards, declarations pages, signed forms, proposals?
-   Should staff choose per document what the client can see?
-6. Should clients be able to upload documents to us (photos of a registration, a closing
-   statement, etc.)?
-7. Which changes can clients request online? (Add/remove a car, add/remove a driver, change of
-   address, change of lienholder/mortgage company, cancellation request, other.)
-8. Who should receive those requests: the client's producer, their CSR, or a shared inbox?
-9. Can clients update their own phone, email and address, or should staff approve each change?
-10. Should clients be able to request a new quote from the portal?
-11. Payments: should the portal just link to each insurance company's payment page? (We don't
-    take payments ourselves.)
-12. Should clients be able to message the agency inside the portal, or just use phone and email?
-13. Who gets a portal account: every client automatically, or only clients we invite?
-14. How should clients log in: a link sent to their email each time (simpler), or a password plus
-    a code on their phone (more secure)?
-15. What web address should it use? For example `portal.sahaagency.com`.
-16. Do we have (or should we get) portal terms of use and a privacy notice? Can our attorney or
-    our E&O insurance company review them?
-17. Do any of our insurance companies require clients to use their own app or website for ID
-    cards or changes?
+2. Which policies should clients see: only active ones, or also past and cancelled ones?
+3. Which details should they see: insurance company, policy number, dates, coverages and
+   deductibles, price? Anything we should hide?
+4. For a family (for example a married couple), can both people see all the family's policies, or
+   only the ones in their own name?
+5. Which documents can clients download: ID cards, declarations pages, quotes? Should staff choose
+   for each document whether the client can see it?
+6. Should clients be able to send us documents (for example a photo of a new car's registration)?
+7. Which changes can clients ask for online? (Add/remove a car, add/remove a driver, new address,
+   new lender/mortgage company, cancel a policy, other.)
+8. Who should get those requests: the client's producer, their CSR, or the front office?
+9. Can clients change their own phone, email and address, or should staff check each change first?
+10. Should clients be able to ask for a new quote from the portal?
+11. Payments: is it OK if the portal just links to each insurance company's payment page?
+12. Should clients be able to send us messages in the portal, or just call and email as now?
+13. Who gets a portal account: every client, or only clients we invite?
+14. Do we have a privacy notice we give clients today? Would you like our attorney to look at the
+    portal's wording before it goes live?
 
-**B. Quote form for our website (like EZLynx "Consumer Quoting")**
+**B. "Get a quote" form on our website**
 
-18. Do you want a "Get a quote" form on our website that creates a new lead in Saha Desk?
+15. Do you want a "Get a quote" form on sahaagency.com that goes straight into Saha Desk?
     (Yes / No / Later)
-19. Are we using EZLynx Consumer Quoting today? If yes, which lines (auto, home, renters,
-    other)?
-20. Who should new website leads go to: one producer, take turns between producers, or a shared
-    inbox?
-21. For now it would say "we'll contact you with your quotes" (live online prices need real
-    insurer connections later). Is that OK?
+16. Which types of insurance should it offer: auto, home, renters, other?
+17. Who should new website leads go to: one producer, producers taking turns, or the front office?
+18. At first the form would say "we'll contact you with your quotes" instead of showing prices
+    right away. Is that OK?
 
-**C. General**
+**C. The agency**
 
-22. Is our staff email on `@sahaagency.com`? Who manages the website, and is it hosted at
-    Hostinger (or somewhere else, like GoDaddy or Wix)? Can we add pages or a form to it?
-23. Which office address is current, Woodbridge or Springfield (or both)? Which one should
-    clients see in Saha Desk, on proposals and emails?
-24. Do we actively write in all of VA, MD, DC, WV, DE, NC and FL today, or only some of them?
-25. Which insurance companies are we appointed with (about 20?), and in which states for each?
-26. What are our office hours (to show clients in the portal and in emails)?
-27. Does our website have a chat assistant that answers clients? (I saw an automatic answer
-    saying "Saha Agency does not provide physical insurance books" and giving our phone number.)
-    If so, who set it up, and should Saha Desk connect to it?
-28. Which coverages do our producers quote most (auto limits, home deductibles, etc.)?
-29. How many clients do we have in EZLynx today, roughly?
-30. Can you send a client export from EZLynx (CSV) with SSNs and driver's license numbers
-    removed, so we can test moving our clients over?
-31. Who should be the admins in Saha Desk, and who are the producers, CSRs and read-only users?
-32. Is there anything in EZLynx you use every day that you want to make sure Saha Desk has?
+19. Which office address is current, and which one should clients see on quotes and emails?
+20. Which states do we actually write in today?
+21. Which insurance companies do we work with, and in which states for each?
+22. What are our office hours?
+23. Which coverages do our producers quote most often (auto limits, home deductibles, etc.)?
+24. About how many clients do we have today?
+25. Can we get a list of our current clients to move into Saha Desk, with Social Security and
+    driver's license numbers left out for now?
+26. Who works at the agency, and what does each person do (owner/manager, producer, CSR, view
+    only)?
+27. Is there anything you use every day now that Saha Desk must have?
 
 Thank you!
 
 ---
 
-Sources for the "found online" facts (for our records, not for the owner message):
+Sources for the agency facts above (for our records, not for the owner):
 - Saha Agency website: https://sahaagency.com/ and https://www.sahaagency.com/contact-us.html
 - Liberty Mutual agent finder: https://agents.libertymutual.com/find-an-agent/state/virginia/springfield/saha-agency-llc_1802241570
 - Yelp: https://www.yelp.com/biz/saha-agency-woodbridge-4
-- Facebook: https://www.facebook.com/ssahafarmers
